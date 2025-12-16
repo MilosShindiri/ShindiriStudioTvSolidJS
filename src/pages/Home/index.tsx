@@ -14,6 +14,7 @@ const Home = props => {
       setGlobalBackground(background);
     }),
   );
+  console.log("object");
   return (
     <View>
       <Background />
