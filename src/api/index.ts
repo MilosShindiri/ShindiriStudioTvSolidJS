@@ -1,5 +1,5 @@
-const API_KEY_V4 = import.meta.env.API_KEY_V4;
-const API_BASE = import.meta.env.API_BASE;
+const API_KEY_V4 = import.meta.env.VITE_TMDB_KEY;
+const API_BASE = "https://api.themoviedb.org/3";
 let tmdbConfig;
 let baseImageUrl;
 const urlParams = new URLSearchParams(window.location.search);
