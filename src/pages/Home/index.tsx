@@ -9,16 +9,12 @@ import { Background } from "@/components/Background";
 // import styles from "../styles";
 
 const Home = props => {
-  createEffect(
-    on(activeElement, () => {
-      setGlobalBackground(background);
-    }),
-  );
-  return (
-    <View>
-      <Background />
-    </View>
-  );
+  // createEffect(
+  //   on(activeElement, () => {
+  setGlobalBackground(background);
+  //   }),
+  // );
+  return <View>{/* <Background /> */}</View>;
   // return (
   // <Column>
   //   <For each={props.data.rows}>
