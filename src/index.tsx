@@ -8,6 +8,8 @@ import { config } from "#devices/common";
 import { lazy } from "solid-js";
 import { tmdbData } from "./api/services/MediaServices";
 import Navbar from "./widgets/Navbar";
+import Home from "./pages/Home";
+import Movies from "./pages/Movies";
 
 merge(LightningConfig, config.lightning);
 
@@ -19,8 +21,8 @@ render(() => {
   return (
     <HashRouter root={App}>
       <Route path="" component={Navbar}>
-        <Route path="/" component={lazy(() => import("./pages/Home"))} preload={tmdbData} />
-        <Route path="/movies" component={lazy(() => import("./pages/Movies"))} preload={tmdbData} />
+        <Route path="/" component={Home} preload={tmdbData} />
+        <Route path="/movies" component={Movies} preload={tmdbData} />
       </Route>
       <Route path="/details/:id" component={lazy(() => import("./pages/Details"))} preload={tmdbData} />
     </HashRouter>
