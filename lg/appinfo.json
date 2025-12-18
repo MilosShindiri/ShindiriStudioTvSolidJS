@@ -1,0 +1,13 @@
+{
+  "id": "xsomitexttest",
+  "version": "1.0.0",
+  "vendor": "3SS",
+  "type": "web",
+  "main": "index.html",
+  "title": "3SS players",
+  "icon": "largeIcon.png",
+  "largeIcon": "largeIcon.png",
+  "iconColor": "#DF0000",
+  "resolution": "1920x1080",
+  "disableBackHistoryAPI": true
+}

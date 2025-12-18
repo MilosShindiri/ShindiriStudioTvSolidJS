@@ -1,34 +1,37 @@
-import { View, Text } from "@lightningtv/solid";
+import { View, Text, For } from "@lightningtv/solid";
 import { Background } from "@/components/Background";
 import { useNavigate } from "@solidjs/router";
-
-const NAVBAR_HEIGHT = 0;
+import logo from "../assets/logo.png";
+import Button from "../components/Button/Button";
+import { Row } from "@lightningtv/solid/primitives";
+import menuItems from "@/constants/menuItems";
 
 const Navbar = props => {
   const navigate = useNavigate();
+
   return (
-    <View width={1920} height={1080}>
+    <View>
       <Background />
 
-      <View y={0} height={NAVBAR_HEIGHT} width={1920}>
-        <Text x={40} y={20} fontSize={32}>
-          Navbar
-        </Text>
-      </View>
+      <View x={32} y={32} src={logo} width={301} height={60} />
 
-      <View
-        x={300}
-        y={20}
-        width={200}
-        height={40}
-        autofocus
-        onEnter={() => navigate("/movies")}
-        onClick={() => navigate("/movies")}
-      >
-        <Text fontSize={28}>Movies</Text>
-      </View>
+      <Row x={400} y={37} gap={20} autofocus>
+        <For each={menuItems}>
+          {item => (
+            <Button
+              {...props}
+              width={118}
+              height={49}
+              onEnter={() => navigate(item.path)}
+              onClick={() => navigate(item.path)}
+            >
+              {item.label}
+            </Button>
+          )}
+        </For>
+      </Row>
 
-      <View y={NAVBAR_HEIGHT}>{props.children}</View>
+      <View y={0}>{props.children}</View>
     </View>
   );
 };
