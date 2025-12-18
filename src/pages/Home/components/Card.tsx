@@ -23,6 +23,7 @@ const CardTextStyles = {
 } as const;
 
 const cardPosterStyles = {
+  borderRadius: 6,
   $focus: {
     border: { width: 6, color: "#ED1C24" },
   },
