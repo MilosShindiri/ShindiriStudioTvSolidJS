@@ -14,7 +14,7 @@ export const config = {
     hero: 500,
   },
   lightning: {
-    debug: true,
+    debug: false,
     focusDebug: false,
     fontSettings: { fontFamily: "Roboto", color: 0xffffffff, fontSize: 40 },
     animationSettings: { easing: "ease-in-out", duration: 250 },

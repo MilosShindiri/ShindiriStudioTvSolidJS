@@ -9,13 +9,22 @@ import menuItems from "@/constants/menuItems";
 const Navbar = props => {
   const navigate = useNavigate();
 
+  let navbar, pageContainer;
+  const focusNavbar = () => {
+    return navbar.setFocus();
+  };
+
+  const focusPageContainer = () => {
+    return pageContainer.setFocus();
+  };
+
   return (
-    <View>
+    <View onUp={focusNavbar} onDown={focusPageContainer}>
       <Background />
 
       <View x={32} y={32} src={logo} width={301} height={60} />
 
-      <Row x={400} y={37} gap={20} autofocus>
+      <Row x={400} y={37} gap={20} autofocus ref={navbar}>
         <For each={menuItems}>
           {item => (
             <Button
@@ -31,7 +40,9 @@ const Navbar = props => {
         </For>
       </Row>
 
-      <View y={0}>{props.children}</View>
+      <View y={0} ref={pageContainer} forwardFocus={0}>
+        {props.children}
+      </View>
     </View>
   );
 };

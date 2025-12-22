@@ -18,6 +18,22 @@ export async function getMovies(slice) {
   }
 }
 
+export async function getAllMovies() {
+  try {
+    const result = await api.get("/discover/movie");
+    return result.results.map(item => ({
+      title: item.title,
+      poster_path: item.poster_path,
+      overview: item.overview,
+      backdrop_path: item.backdrop_path,
+      id: item.id,
+    }));
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function getTV(slice) {
   try {
     const result = await api.get("/discover/tv");
@@ -40,4 +56,9 @@ export function tmdbData() {
   rows.push({ title: "MOVIES", items: createResource(() => getMovies(true))[0] });
   rows.push({ title: "SERIES", items: createResource(() => getTV(true))[0] });
   return { rows };
+}
+
+export function moviesData() {
+  const [movies] = createResource(() => getAllMovies(true));
+  return { movies };
 }
