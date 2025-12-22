@@ -35,6 +35,7 @@ const Card = props => {
   return (
     <View
       id="card"
+      item={props.item}
       width={props.style.width}
       height={props.style.height}
       display="flex"
