@@ -1,4 +1,4 @@
-const basePath = ""; //import.meta.env.BASE_URL;
+const basePath = "static/";
 
 export default [
   {

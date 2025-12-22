@@ -26,14 +26,14 @@ const Home = props => {
         <Column id="mediaContainer" width={1241} height={404} autofocus>
           <For each={props.data.rows}>
             {row => (
-              <>
+              <View width={1241} height={404} forwardFocus={1}>
                 <Text style={HomeStyle}>{row.title}</Text>
                 <Row y={45} width={1241} height={359} gap={24} scroll="none" forwardFocus={0}>
                   <For each={row.items()}>
                     {item => <Card item={item} style={styles.homeCard} forwardFocus={0} />}
                   </For>
                 </Row>
-              </>
+              </View>
             )}
           </For>
         </Column>

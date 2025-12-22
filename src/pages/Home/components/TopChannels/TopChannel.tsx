@@ -1,4 +1,5 @@
 import { Text, View } from "@lightningtv/solid";
+const CHANNELS_BASE = "static/images/channels/";
 
 const TopChannelStyle = {
   width: 280,
@@ -10,7 +11,10 @@ const TopChannelStyle = {
   justifyContent: "center",
   alignItems: "center",
   gap: 24,
-};
+  $focus: {
+    border: { width: 4, color: "#ED1C24" },
+  },
+} as const;
 
 const TopChannelTextStyle = {
   fontFamily: "Inter",
@@ -18,14 +22,14 @@ const TopChannelTextStyle = {
   fontSize: 16,
   lineHeight: 1,
   height: 19,
-};
+} as const;
 
 const TopChannel = props => {
-  console.log(props.channel);
+  console.log(CHANNELS_BASE + props.channel.image);
   return (
     <View style={TopChannelStyle} id="card">
-      <View width={45} height={45} src={"assets/channels/" + props.channel.image}></View>
-      <Text>{props.channel.name}</Text>
+      <View width={45} height={45} src={CHANNELS_BASE + props.channel.image}></View>
+      <Text style={TopChannelTextStyle}>{props.channel.name}</Text>
     </View>
   );
 };
