@@ -14,7 +14,7 @@ export const config = {
     hero: 500,
   },
   lightning: {
-    debug: false,
+    debug: true,
     focusDebug: false,
     fontSettings: { fontFamily: "Roboto", color: 0xffffffff, fontSize: 40 },
     animationSettings: { easing: "ease-in-out", duration: 250 },
@@ -24,7 +24,7 @@ export const config = {
       numImageWorkers: 2,
       fontEngines: [SdfTextRenderer],
       renderEngine: WebGlCoreRenderer,
-      inspector: import.meta.env.DEV ? Inspector : undefined,
+      // inspector: import.meta.env.DEV ? Inspector : undefined,
       // 720p = 0.666667, 1080p = 1, 1440p = 1.5, 2160p = 2
       // Also set this to 0.8 to increase performance if 1 is struggling during animations
       deviceLogicalPixelRatio: 1,
