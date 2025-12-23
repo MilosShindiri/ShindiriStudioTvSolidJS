@@ -1,7 +1,7 @@
 import { setGlobalBackground } from "@/state";
 import { View, For, activeElement } from "@lightningtv/solid";
 import { Row } from "@lightningtv/solid/primitives";
-import { createEffect, on } from "solid-js";
+import { createEffect, on, onMount, Show } from "solid-js";
 import { debounce } from "@solid-primitives/scheduled";
 import Card from "./components/Card";
 
@@ -13,7 +13,34 @@ const MoviesStyles = {
 } as const;
 
 const Movie = props => {
+  let bg1, bg2;
+  let active = 0;
+  let lastBg: string | undefined;
+
+  const animationSettings = {
+    duration: 600,
+    easing: "ease-in-out",
+  };
   setGlobalBackground(" ");
+  function changeBackground(img: string) {
+    if (img === lastBg) return;
+    lastBg = img;
+
+    const currentBg = active === 1 ? bg2 : bg1;
+    const nextBg = active === 1 ? bg1 : bg2;
+
+    // postavi novu sliku na NEAKTIVNI background
+    nextBg.src = img;
+    nextBg.alpha = 0.01;
+
+    // fade in novi
+    nextBg.animate({ alpha: 1 }, animationSettings).start();
+
+    // fade out stari
+    currentBg.animate({ alpha: 0.01 }, animationSettings).start();
+
+    active = active === 1 ? 2 : 1;
+  }
   const delayedBackground = debounce((img: string) => {
     setGlobalBackground(img);
   }, 400);
@@ -28,10 +55,26 @@ const Movie = props => {
   );
 
   return (
-    <View forwardFocus={0}>
-      <Row y={697} x={64} gap={24} width={1241} forwardFocus={0} scroll="edge" throttleInput={200}>
-        <For each={props.data.movies() ?? []}>{item => <Card item={item} style={MoviesStyles} />}</For>
-      </Row>
+    <View forwardFocus={3}>
+      <View
+        ref={bg1}
+        width={1920}
+        height={1080}
+        alpha={0}
+        textureOptions={{ resizeMode: { type: "cover" } }}
+      />
+      <View
+        ref={bg2}
+        width={1920}
+        height={1080}
+        alpha={0}
+        textureOptions={{ resizeMode: { type: "cover" } }}
+      />
+      <Show when={props.data.movies()?.length}>
+        <Row y={697} x={64} gap={24} width={1241} autofocus scroll="edge" throttleInput={200}>
+          <For each={props.data.movies() ?? []}>{item => <Card item={item} style={MoviesStyles} />}</For>
+        </Row>
+      </Show>
     </View>
   );
 };

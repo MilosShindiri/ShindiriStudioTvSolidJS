@@ -43,6 +43,8 @@ const Card = props => {
       style={CardStyles}
       gap={16}
       forwardStates
+      focusable
+      // autofocus={props.autofocus}
     >
       <View id="picture" style={cardPosterStyles} src={getImageUrl(poster_path, "w500")} />
       <Text id="text" y={props.style.height} width={props.style.width} style={CardTextStyles}>
