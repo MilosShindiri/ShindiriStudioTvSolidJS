@@ -20,7 +20,7 @@ declare global {
 }
 
 const App = props => {
-  useMouse();
+  // useMouse();
   const navigate = useNavigate();
   const announcer = useAnnouncer();
   announcer.debug = false;
