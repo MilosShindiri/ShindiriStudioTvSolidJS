@@ -21,9 +21,9 @@ const Home = props => {
   setGlobalBackground(background);
   return (
     <Show when={props.data.rows[0].items()}>
-      <View style={styles.page}>
-        <Background />
-        <View id="gradient" width={1920} height={1080} colorTl="#0000000" colorBr="#151515" />
+      <View style={styles.page} forwardFocus={1}>
+        {/* <Background /> */}
+        <View id="gradient" width={1920} height={1080} colorTl="#151515" colorBr="#00000000" />
         <Column y={125} x={62} gap={5}>
           <Row id="homeContainer" scroll="none">
             <Column id="mediaContainer" width={1241} height={404} autofocus>

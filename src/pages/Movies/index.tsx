@@ -55,7 +55,7 @@ const Movie = props => {
   );
 
   return (
-    <View forwardFocus={3}>
+    <View forwardFocus={2}>
       <View
         ref={bg1}
         width={1920}
