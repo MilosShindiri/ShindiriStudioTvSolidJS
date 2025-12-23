@@ -54,7 +54,7 @@ styles.text = {
 
 export default function Button(props) {
   return (
-    <View {...props} forwardStates style={styles.container}>
+    <View forwardStates style={styles.container} {...props}>
       <Text style={styles.text}>{props.children}</Text>
     </View>
   );

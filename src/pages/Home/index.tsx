@@ -7,6 +7,7 @@ import background from "../../assets/background.jpg";
 import { Background } from "@/components/Background";
 import styles from "@/styles";
 import TopChannels from "./components/TopChannels";
+import GoLiveButton from "./components/GoLiveButton";
 
 const HomeStyle = {
   fontFamily: "Inter",
@@ -23,23 +24,26 @@ const Home = props => {
       <View style={styles.page}>
         <Background />
         <View id="gradient" width={1920} height={1080} colorTl="#0000000" colorBr="#151515" />
-        <Row id="homeContainer" y={125} x={62} scroll="none">
-          <Column id="mediaContainer" width={1241} height={404} autofocus>
-            <For each={props.data.rows}>
-              {row => (
-                <>
-                  <Text style={HomeStyle} skipFocus>
-                    {row.title}
-                  </Text>
-                  <Row y={45} width={1241} height={359} gap={24} scroll="none">
-                    <For each={row.items()}>{item => <Card item={item} style={styles.homeCard} />}</For>
-                  </Row>
-                </>
-              )}
-            </For>
-          </Column>
-          <TopChannels />
-        </Row>
+        <Column y={125} x={62} gap={5}>
+          <Row id="homeContainer" scroll="none">
+            <Column id="mediaContainer" width={1241} height={404} autofocus>
+              <For each={props.data.rows}>
+                {row => (
+                  <>
+                    <Text style={HomeStyle} skipFocus>
+                      {row.title}
+                    </Text>
+                    <Row width={1241} height={359} gap={24} scroll="none">
+                      <For each={row.items()}>{item => <Card item={item} style={styles.homeCard} />}</For>
+                    </Row>
+                  </>
+                )}
+              </For>
+            </Column>
+            <TopChannels />
+          </Row>
+          <GoLiveButton />
+        </Column>
       </View>
     </Show>
   );
