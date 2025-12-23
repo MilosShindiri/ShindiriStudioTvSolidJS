@@ -1,5 +1,5 @@
 import styles from "@/styles";
-import { For, Text } from "@lightningtv/solid";
+import { For, Text, View } from "@lightningtv/solid";
 import { Column } from "@lightningtv/solid/primitives";
 import TopChannel from "./TopChannel";
 
@@ -19,17 +19,16 @@ const TopChannelLabelStyle = {
   width: 280,
   height: 29,
   display: "flex",
-  alignItems: "center",
   justifyContent: "center",
-  textAlighn: "center",
+  alignSelf: "center",
 } as const;
 
 const TopChannels = () => {
   return (
     <Column style={styles.topChannelsWrapper} flexBoundary="fixed">
-      <Text style={TopChannelLabelStyle} skipFocus>
-        Top 5 Channels
-      </Text>
+      <View style={TopChannelLabelStyle} skipFocus>
+        <Text style={TopChannelLabelStyle}>Top 5 Channels</Text>
+      </View>
       <For each={topChannelsData}>{channel => <TopChannel channel={channel} />}</For>
     </Column>
   );
