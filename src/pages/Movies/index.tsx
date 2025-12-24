@@ -84,11 +84,21 @@ const Movie = props => {
         colorBr="rgba(21,21,21,0)"
       />
 
-      <Text x={69} y={258} fontSize={28} fontWeight={600} color="#FFFFFF">
+      <Text x={69} y={258} fontSize={28} fontWeight={600} color="#FFFFFF" fontFamily="Inter">
         {globalTitle()}
       </Text>
 
-      <Text width={698} height={124} x={69} y={316} fontSize={28} fontWeight={600} contain="width">
+      <Text
+        width={698}
+        height={124}
+        x={69}
+        y={316}
+        fontSize={22}
+        fontWeight={600}
+        contain="width"
+        fontFamily="Inter"
+        lineHeight={31}
+      >
         {globalOverview()}
       </Text>
 
