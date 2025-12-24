@@ -13,7 +13,7 @@ const GlobalBackground = () => {
   };
 
   createEffect(() => {
-    const img = globalBackground(); // direktno signal
+    const img = globalBackground();
     if (!img || img === lastBg) return;
 
     lastBg = img;

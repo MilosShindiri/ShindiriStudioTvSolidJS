@@ -14,33 +14,9 @@ const MoviesStyles = {
 
 const Movie = props => {
   let bg1, bg2;
-  let active = 0;
-  let lastBg: string | undefined;
 
-  const animationSettings = {
-    duration: 600,
-    easing: "ease-in-out",
-  };
   setGlobalBackground(" ");
-  function changeBackground(img: string) {
-    if (img === lastBg) return;
-    lastBg = img;
 
-    const currentBg = active === 1 ? bg2 : bg1;
-    const nextBg = active === 1 ? bg1 : bg2;
-
-    // postavi novu sliku na NEAKTIVNI background
-    nextBg.src = img;
-    nextBg.alpha = 0.01;
-
-    // fade in novi
-    nextBg.animate({ alpha: 1 }, animationSettings).start();
-
-    // fade out stari
-    currentBg.animate({ alpha: 0.01 }, animationSettings).start();
-
-    active = active === 1 ? 2 : 1;
-  }
   const delayedBackground = debounce((img: string) => {
     setGlobalBackground(img);
   }, 400);
@@ -59,14 +35,14 @@ const Movie = props => {
       <View
         ref={bg1}
         width={1920}
-        height={1080}
+        height={697}
         alpha={0}
         textureOptions={{ resizeMode: { type: "cover" } }}
       />
       <View
         ref={bg2}
         width={1920}
-        height={1080}
+        height={697}
         alpha={0}
         textureOptions={{ resizeMode: { type: "cover" } }}
       />

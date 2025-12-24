@@ -35,14 +35,14 @@ export const useBackground = () => {
       <View
         ref={bg1}
         width={1920}
-        height={1080}
+        height={697}
         alpha={0}
         textureOptions={{ resizeMode: { type: "cover" } }}
       />
       <View
         ref={bg2}
         width={1920}
-        height={1080}
+        height={697}
         alpha={0}
         textureOptions={{ resizeMode: { type: "cover" } }}
       />
