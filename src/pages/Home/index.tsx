@@ -18,9 +18,10 @@ const HomeStyle = {
 } as const;
 
 const Home = props => {
-  setGlobalBackground(background);
   setBackgroundWidth(1920);
   setBackgroundHeight(1080);
+  setGlobalBackground(background);
+
   return (
     <Show when={props.data.rows[0].items()}>
       <View style={styles.page} forwardFocus={1}>

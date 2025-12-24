@@ -23,12 +23,17 @@ const MoviesStyles = {
 const Movie = props => {
   let bg1, bg2;
 
-  setGlobalBackground(" ");
   setBackgroundWidth(1920);
-  setBackgroundHeight(697);
+  setBackgroundHeight(697); // samo Movies
+  setGlobalBackground(" ");
 
   const delayedBackground = debounce((img: string) => {
     setGlobalBackground(img);
+  }, 400);
+
+  const delayedTextUpdate = debounce((title: string, overview: string) => {
+    setGlobalTitle(title);
+    setGlobalOverview(overview);
   }, 400);
 
   createEffect(
@@ -38,8 +43,7 @@ const Movie = props => {
       const img = `https://image.tmdb.org/t/p/w1920/${el.item.backdrop_path}`;
       delayedBackground(img);
 
-      setGlobalTitle(el.item.title || el.item.name || "");
-      setGlobalOverview(el.item.overview || "");
+      delayedTextUpdate(el.item.title || el.item.name || "", el.item.overview || "");
     }),
   );
 
@@ -50,14 +54,14 @@ const Movie = props => {
         width={1920}
         height={697}
         alpha={0}
-        textureOptions={{ resizeMode: { type: "cover" } }}
+        textureOptions={{ resizeMode: { type: "contain" } }}
       />
       <View
         ref={bg2}
         width={1920}
         height={697}
         alpha={0}
-        textureOptions={{ resizeMode: { type: "cover" } }}
+        textureOptions={{ resizeMode: { type: "contain" } }}
       />
 
       <Text x={69} y={258} fontSize={28} fontWeight={600} color="#FFFFFF">

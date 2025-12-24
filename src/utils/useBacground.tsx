@@ -37,14 +37,14 @@ export const useBackground = () => {
         width={1920}
         height={697}
         alpha={0}
-        textureOptions={{ resizeMode: { type: "cover" } }}
+        // textureOptions={{ resizeMode: { type: "cover" } }}
       />
       <View
         ref={bg2}
         width={1920}
         height={697}
         alpha={0}
-        textureOptions={{ resizeMode: { type: "cover" } }}
+        // textureOptions={{ resizeMode: { type: "cover" } }}
       />
     </>
   );
