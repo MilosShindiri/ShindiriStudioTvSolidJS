@@ -48,7 +48,7 @@ const Movie = props => {
   );
 
   return (
-    <View forwardFocus={4}>
+    <View forwardFocus={6}>
       <View
         ref={bg1}
         width={1920}
@@ -62,6 +62,26 @@ const Movie = props => {
         height={697}
         alpha={0}
         textureOptions={{ resizeMode: { type: "contain" } }}
+      />
+
+      {/* Gradient 1 – dijagonalni (82.93deg) */}
+      <View
+        width={1920}
+        height={1080}
+        colorTl="#151515"
+        colorTr="rgba(21,21,21,0.6)"
+        colorBl="#151515"
+        colorBr="rgba(21,21,21,0.6)"
+      />
+
+      {/* Gradient 2 – top fade (357.53deg) */}
+      <View
+        width={1920}
+        height={1080}
+        colorTl="#151515"
+        colorTr="#151515"
+        colorBl="rgba(21,21,21,0)"
+        colorBr="rgba(21,21,21,0)"
       />
 
       <Text x={69} y={258} fontSize={28} fontWeight={600} color="#FFFFFF">
