@@ -1,6 +1,6 @@
 import { View } from "@lightningtv/solid";
 import { createEffect } from "solid-js";
-import { globalBackground } from "@/state"; // direktno signal
+import { backgroundHeight, backgroundWidth, globalBackground } from "@/state";
 
 const GlobalBackground = () => {
   let bg1, bg2;
@@ -32,20 +32,20 @@ const GlobalBackground = () => {
 
   return (
     <>
-      <View width={1920} height={1080} color="#141217" />
+      <View width={backgroundWidth()} height={backgroundHeight()} color="#141217" />
       <View
         ref={bg1}
-        width={1920}
-        height={1080}
+        width={backgroundWidth()}
+        height={backgroundHeight()}
         alpha={0}
-        textureOptions={{ resizeMode: { type: "cover" } }}
+        // textureOptions={{ resizeMode: { type: "cover" } }}
       />
       <View
         ref={bg2}
-        width={1920}
-        height={1080}
+        width={backgroundWidth()}
+        height={backgroundHeight()}
         alpha={0}
-        textureOptions={{ resizeMode: { type: "cover" } }}
+        // textureOptions={{ resizeMode: { type: "cover" } }}
       />
     </>
   );

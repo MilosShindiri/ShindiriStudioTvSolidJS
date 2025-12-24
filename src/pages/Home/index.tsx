@@ -2,7 +2,7 @@ import { activeElement, For, Text, View } from "@lightningtv/solid";
 import { Column, Row } from "@lightningtv/solid/primitives";
 import Card from "../Home/components/Card";
 import { children, createEffect, createResource, on, Show } from "solid-js";
-import { setGlobalBackground } from "@/state";
+import { setBackgroundHeight, setBackgroundWidth, setGlobalBackground } from "@/state";
 import background from "../../assets/background.jpg";
 import { Background } from "@/components/Background";
 import styles from "@/styles";
@@ -19,6 +19,8 @@ const HomeStyle = {
 
 const Home = props => {
   setGlobalBackground(background);
+  setBackgroundWidth(1920);
+  setBackgroundHeight(1080);
   return (
     <Show when={props.data.rows[0].items()}>
       <View style={styles.page} forwardFocus={1}>

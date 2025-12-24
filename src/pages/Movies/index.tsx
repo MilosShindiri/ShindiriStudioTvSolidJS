@@ -1,5 +1,13 @@
-import { setGlobalBackground } from "@/state";
-import { View, For, activeElement } from "@lightningtv/solid";
+import {
+  globalOverview,
+  globalTitle,
+  setBackgroundHeight,
+  setBackgroundWidth,
+  setGlobalBackground,
+  setGlobalOverview,
+  setGlobalTitle,
+} from "@/state";
+import { View, Text, For, activeElement } from "@lightningtv/solid";
 import { Row } from "@lightningtv/solid/primitives";
 import { createEffect, on, onMount, Show } from "solid-js";
 import { debounce } from "@solid-primitives/scheduled";
@@ -16,6 +24,8 @@ const Movie = props => {
   let bg1, bg2;
 
   setGlobalBackground(" ");
+  setBackgroundWidth(1920);
+  setBackgroundHeight(697);
 
   const delayedBackground = debounce((img: string) => {
     setGlobalBackground(img);
@@ -27,11 +37,14 @@ const Movie = props => {
 
       const img = `https://image.tmdb.org/t/p/w1920/${el.item.backdrop_path}`;
       delayedBackground(img);
+
+      setGlobalTitle(el.item.title || el.item.name || "");
+      setGlobalOverview(el.item.overview || "");
     }),
   );
 
   return (
-    <View forwardFocus={2}>
+    <View forwardFocus={4}>
       <View
         ref={bg1}
         width={1920}
@@ -46,6 +59,15 @@ const Movie = props => {
         alpha={0}
         textureOptions={{ resizeMode: { type: "cover" } }}
       />
+
+      <Text x={69} y={258} fontSize={28} fontWeight={600} color="#FFFFFF">
+        {globalTitle()}
+      </Text>
+
+      <Text width={698} height={124} x={69} y={316} fontSize={28} fontWeight={600} contain="width">
+        {globalOverview()}
+      </Text>
+
       <Show when={props.data.movies()?.length}>
         <Row y={697} x={64} gap={24} width={1241} autofocus scroll="edge" throttleInput={200}>
           <For each={props.data.movies() ?? []}>{item => <Card item={item} style={MoviesStyles} />}</For>
