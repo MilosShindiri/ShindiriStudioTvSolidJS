@@ -30,7 +30,6 @@ const App = props => {
     <View ref={window.APP} onAnnouncer={() => (announcer.enabled = !announcer.enabled)}>
       {/* Global background uvek prvi */}
       <GlobalBackground />
-
       {/* Ostali UI */}
       {props.children}
     </View>

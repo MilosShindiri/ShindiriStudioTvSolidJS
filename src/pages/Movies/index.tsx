@@ -6,13 +6,14 @@ import {
   setGlobalBackground,
   setGlobalOverview,
   setGlobalTitle,
+  setLoading,
 } from "@/state";
 import { View, Text, For, activeElement } from "@lightningtv/solid";
 import { Row } from "@lightningtv/solid/primitives";
 import { createEffect, on, onMount, Show } from "solid-js";
 import { debounce } from "@solid-primitives/scheduled";
 import Card from "./components/Card";
-
+import { moviesData } from "../../api/services/MediaServices";
 const MoviesStyles = {
   fontWeight: 700,
   fontSize: 24,
@@ -35,7 +36,13 @@ const Movie = props => {
     setGlobalTitle(title);
     setGlobalOverview(overview);
   }, 400);
+  onMount(async () => {
+    setLoading(true);
 
+    await moviesData(); // API call
+
+    setLoading(false);
+  });
   createEffect(
     on(activeElement, el => {
       if (!el?.item?.backdrop_path) return;
