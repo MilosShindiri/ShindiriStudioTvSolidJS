@@ -1,6 +1,7 @@
 import { useNavigate } from "@solidjs/router";
 import { View, ElementNode } from "@lightningtv/solid";
 import { useAnnouncer, useMouse } from "@lightningtv/solid/primitives";
+import GlobalBackground from "@/components/GlobalBackground";
 
 declare module "@lightningtv/solid/primitives" {
   interface KeyMap {
@@ -26,13 +27,11 @@ const App = props => {
   announcer.enabled = false;
 
   return (
-    <View
-      ref={window.APP}
-      onAnnouncer={() => (announcer.enabled = !announcer.enabled)}
-      // onLast={() => console.log("onLast")}
-      // onPlayPause={e => console.log("onPlayPause")}
-      // onMenu={() => console.log("onMenu")}
-    >
+    <View ref={window.APP} onAnnouncer={() => (announcer.enabled = !announcer.enabled)}>
+      {/* Global background uvek prvi */}
+      <GlobalBackground />
+
+      {/* Ostali UI */}
       {props.children}
     </View>
   );
