@@ -30,8 +30,7 @@ const cardPosterStyles = {
 } as const;
 
 const Card = props => {
-  const { title, poster_path } = props.item;
-
+  const { id, title, poster_path } = props.item;
   return (
     <View
       id="card"
@@ -42,6 +41,7 @@ const Card = props => {
       gap={16}
       style={CardStyles}
       forwardStates
+      onEnter={() => props.onEnter()}
     >
       <View id="pic" style={cardPosterStyles} src={getImageUrl(poster_path, "w342")} />
       <Text id="text" y={props.style.height} width={props.style.width} style={CardTextStyles}>

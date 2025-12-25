@@ -25,7 +25,6 @@ const TopChannelTextStyle = {
 } as const;
 
 const TopChannel = props => {
-  console.log(CHANNELS_BASE + props.channel.image);
   return (
     <View style={TopChannelStyle} id="card">
       <View width={45} height={45} src={CHANNELS_BASE + props.channel.image}></View>

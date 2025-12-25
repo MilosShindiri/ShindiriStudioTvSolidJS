@@ -8,6 +8,7 @@ import { Background } from "@/components/Background";
 import styles from "@/styles";
 import TopChannels from "./components/TopChannels";
 import GoLiveButton from "./components/GoLiveButton";
+import { useNavigate } from "@solidjs/router";
 
 const HomeStyle = {
   fontFamily: "Inter",
@@ -19,6 +20,11 @@ const HomeStyle = {
 
 const Home = props => {
   setGlobalBackground(background);
+  const navigate = useNavigate();
+
+  function navigateToDetails(id, title) {
+    navigate("/" + title.toLowerCase() + "/details/" + id);
+  }
   return (
     <Show when={props.data.rows[0].items()}>
       <View style={styles.page}>
@@ -34,7 +40,15 @@ const Home = props => {
                       {row.title}
                     </Text>
                     <Row width={1241} height={359} gap={24} scroll="none">
-                      <For each={row.items()}>{item => <Card item={item} style={styles.homeCard} />}</For>
+                      <For each={row.items()}>
+                        {item => (
+                          <Card
+                            item={item}
+                            style={styles.homeCard}
+                            onEnter={() => navigateToDetails(item.id, row.title)}
+                          />
+                        )}
+                      </For>
                     </Row>
                   </>
                 )}
