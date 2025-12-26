@@ -37,7 +37,13 @@ render(() => {
             preload={tmdbData}
             shouldDispose={() => prevPath() === "/movies"}
           />
-          <KeepAliveRoute id="movies" path="/movies" component={Movies} preload={moviesData} />
+          <KeepAliveRoute
+            id="movies"
+            path="/movies"
+            component={Movies}
+            preload={moviesData}
+            shouldDispose={() => prevPath() === "/"}
+          />
         </KeepAliveRoute>
 
         {/* Details NE sme biti keep alive */}
