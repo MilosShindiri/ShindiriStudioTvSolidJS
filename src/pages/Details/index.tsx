@@ -19,7 +19,7 @@ const MetaDataStyle = {
 const Details = () => {
   const { id, mediaType } = useParams();
   const [data] = createResource(() => id, mediaType === "movies" ? getMovieDetails : getSeriesDetails);
-  setGlobalBackground(" ");
+  // setGlobalBackground(" ");
 
   return (
     <View>
