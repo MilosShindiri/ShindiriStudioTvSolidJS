@@ -27,11 +27,9 @@ const GlobalBackground = () => {
     nextBg.src = img;
     nextBg.alpha = 0.01;
 
-    // Prekinemo stare animacije
     if (currentAnim) currentAnim.stop();
     if (nextAnim) nextAnim.stop();
 
-    // Startujemo nove animacije i čuvamo ih
     nextAnim = nextBg.animate({ alpha: 1 }, animationSettings);
     nextAnim.start();
 

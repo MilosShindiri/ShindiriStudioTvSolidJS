@@ -8,6 +8,7 @@ import { Background } from "@/components/Background";
 import styles from "@/styles";
 import TopChannels from "./components/TopChannels";
 import GoLiveButton from "./components/GoLiveButton";
+import LoadingScreen from "@/components/loading/Spinner";
 
 const HomeStyle = {
   fontFamily: "Inter",
@@ -23,7 +24,7 @@ const Home = props => {
   setGlobalBackground(background);
 
   return (
-    <Show when={props.data.rows[0].items()}>
+    <Show when={props.data.rows[0].items()} fallback={<LoadingScreen />}>
       <View style={styles.page} forwardFocus={1}>
         {/* <Background /> */}
         <View id="gradient" width={1920} height={1080} colorTl="#151515" colorBr="#00000000" />

@@ -27,7 +27,7 @@ const Movie = props => {
   let bg1, bg2;
 
   setBackgroundWidth(1920);
-  setBackgroundHeight(697); // samo Movies
+  setBackgroundHeight(697);
   setGlobalBackground(" ");
 
   const delayedBackground = debounce((img: string) => {
@@ -41,7 +41,7 @@ const Movie = props => {
   onMount(async () => {
     setLoading(true);
 
-    await moviesData(); // API call
+    await moviesData();
 
     setLoading(false);
   });
