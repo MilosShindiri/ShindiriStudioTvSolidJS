@@ -33,7 +33,7 @@ const GlobalBackground = () => {
     nextAnim = nextBg.animate({ alpha: 1 }, animationSettings);
     nextAnim.start();
 
-    currentAnim = currentBg.animate({ alpha: 0.01 }, animationSettings);
+    currentAnim = currentBg.animate({ alpha: 0.0 }, animationSettings);
     currentAnim.start();
 
     active = active === 1 ? 2 : 1;

@@ -8,6 +8,7 @@ import styles from "@/styles";
 import TopChannels from "./components/TopChannels";
 import GoLiveButton from "./components/GoLiveButton";
 import { useAppNavigation } from "@/hooks/useAppNavigation";
+import LoadingScreen from "@/components/loading/Spinner";
 
 const HomeStyle = {
   fontFamily: "Inter",
@@ -28,7 +29,7 @@ const Home = props => {
 
   const { toDetails } = useAppNavigation();
   return (
-    <Show when={props.data.rows[0].items()}>
+    <Show when={props.data.rows[0].items()} fallback={<LoadingScreen />}>
       <View style={styles.page} forwardFocus={1} onFocus={homeElFocused}>
         {/* <Background /> */}
         <View id="gradient" width={1920} height={1080} colorTl="#151515" colorBr="#00000000" />
