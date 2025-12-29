@@ -1,7 +1,7 @@
-import { For, Text, View } from "@lightningtv/solid";
+import { activeElement, For, Text, View } from "@lightningtv/solid";
 import { Column, Row } from "@lightningtv/solid/primitives";
 import Card from "../Home/components/Card";
-import { Show } from "solid-js";
+import { createEffect, on, Show } from "solid-js";
 import { setBackgroundHeight, setBackgroundWidth, setGlobalBackground } from "@/state";
 import background from "../../assets/background.jpg";
 import styles from "@/styles";
@@ -21,10 +21,15 @@ const Home = props => {
   setBackgroundWidth(1920);
   setBackgroundHeight(1080);
   setGlobalBackground(background);
+
+  const homeElFocused = () => {
+    setGlobalBackground(background);
+  };
+
   const { toDetails } = useAppNavigation();
   return (
     <Show when={props.data.rows[0].items()}>
-      <View style={styles.page} forwardFocus={1}>
+      <View style={styles.page} forwardFocus={1} onFocus={homeElFocused}>
         {/* <Background /> */}
         <View id="gradient" width={1920} height={1080} colorTl="#151515" colorBr="#00000000" />
         <Column y={125} x={62} gap={5}>

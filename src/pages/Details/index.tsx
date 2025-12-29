@@ -6,7 +6,7 @@ import BackButton from "./components/BackButton";
 import { getImageUrl } from "@/api";
 import WatchNowButton from "./components/WatchNowButton";
 import { Column } from "@lightningtv/solid/primitives";
-import { setGlobalBackground } from "@/state";
+import { setBackgroundHeight, setBackgroundWidth, setGlobalBackground } from "@/state";
 
 const MetaDataStyle = {
   fontFamily: "Inter",
@@ -19,7 +19,9 @@ const MetaDataStyle = {
 const Details = () => {
   const { id, mediaType } = useParams();
   const [data] = createResource(() => id, mediaType === "movies" ? getMovieDetails : getSeriesDetails);
-  // setGlobalBackground(" ");
+  setBackgroundWidth(1920);
+  setBackgroundHeight(1080);
+  setGlobalBackground(" ");
 
   return (
     <View>

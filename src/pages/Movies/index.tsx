@@ -9,7 +9,7 @@ import {
 } from "@/state";
 import { View, Text, For, activeElement } from "@lightningtv/solid";
 import { Row } from "@lightningtv/solid/primitives";
-import { createEffect, on, onMount, Show } from "solid-js";
+import { createEffect, on, onCleanup, onMount, Show } from "solid-js";
 import { debounce } from "@solid-primitives/scheduled";
 import Card from "./components/Card";
 import { useAppNavigation } from "@/hooks/useAppNavigation";
@@ -23,25 +23,34 @@ const MoviesStyles = {
 
 const Movie = props => {
   let bg1, bg2;
+  let enabled = true;
 
   setBackgroundWidth(1920);
   setBackgroundHeight(697); // samo Movies
   setGlobalBackground(" ");
   const { toDetails } = useAppNavigation();
+  const isActive = () => location.hash.endsWith("movies");
 
   const delayedBackground = debounce((img: string) => {
-    setGlobalBackground(img);
+    if (isActive()) {
+      setGlobalBackground(img);
+    }
   }, 400);
 
   const delayedTextUpdate = debounce((title: string, overview: string) => {
-    setGlobalTitle(title);
-    setGlobalOverview(overview);
+    if (isActive()) {
+      setGlobalTitle(title);
+      setGlobalOverview(overview);
+    }
   }, 400);
 
   createEffect(
     on(activeElement, el => {
+      if (!enabled) return;
       if (!el?.item?.backdrop_path) return;
 
+      setBackgroundWidth(1920);
+      setBackgroundHeight(697); // samo Movies
       const img = `https://image.tmdb.org/t/p/w1920/${el.item.backdrop_path}`;
       delayedBackground(img);
 
@@ -112,7 +121,6 @@ const Movie = props => {
                 item={item}
                 style={MoviesStyles}
                 onEnter={() => {
-                  console.log("object");
                   toDetails(item.id, "movies");
                 }}
               />
