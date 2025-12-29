@@ -1,12 +1,12 @@
-import tmdbApi from '../tmdbInstance';
+import api from "..";
 
 export async function getMovieDetails(id) {
-  const response = await tmdbApi.get('/movie/' + id);
-  return response.data;
+  const response = await api.get("/movie/" + id);
+  return response;
 }
 
 export async function getSeriesDetails(seriesId) {
-  const response = await tmdbApi.get('/tv/' + seriesId);
+  const response = await api.get("/tv/" + seriesId);
   const {
     name: title,
     genres,
@@ -18,7 +18,7 @@ export async function getSeriesDetails(seriesId) {
     backdrop_path,
     id,
     vote_average,
-  } = response.data;
+  } = response;
   return {
     title,
     genres,
@@ -34,31 +34,29 @@ export async function getSeriesDetails(seriesId) {
 }
 
 export async function getAgeRestriction(id, isMovie) {
-  const response = await tmdbApi.get(
-    (isMovie ? '/movie/' : '/tv/') + id + (isMovie ? '/release_dates' : '/content_ratings')
+  const response = await api.get(
+    (isMovie ? "/movie/" : "/tv/") + id + (isMovie ? "/release_dates" : "/content_ratings"),
   );
   return response.data;
 }
 
 export async function getCredits(id) {
-  const response = await tmdbApi.get('/movie/' + id + '/credits');
+  const response = await api.get("/movie/" + id + "/credits");
   return {
     director: response.data.crew
-      .filter((item) => item.job === 'Director')
-      .map((item) => item.name)
-      .join(', '),
-    cast: response.data.cast.map((item) => item.name).join(', '),
+      .filter(item => item.job === "Director")
+      .map(item => item.name)
+      .join(", "),
+    cast: response.data.cast.map(item => item.name).join(", "),
   };
 }
 
 export async function getTVCredits(id) {
-  const response = await tmdbApi.get('/tv/' + id + '/aggregate_credits');
-  const directors = response.data.crew.filter((item) =>
-    item.jobs.some((job) => job.job === 'Director')
-  );
+  const response = await api.get("/tv/" + id + "/aggregate_credits");
+  const directors = response.data.crew.filter(item => item.jobs.some(job => job.job === "Director"));
   const cast = response.data.cast;
   return {
-    director: directors.map((item) => item.name).join(', '),
-    cast: cast.map((item) => item.name).join(', '),
+    director: directors.map(item => item.name).join(", "),
+    cast: cast.map(item => item.name).join(", "),
   };
 }

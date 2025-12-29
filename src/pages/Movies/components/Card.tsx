@@ -44,6 +44,7 @@ const Card = props => {
       gap={16}
       forwardStates
       focusable
+      onEnter={() => props.onEnter()}
       // autofocus={props.autofocus}
     >
       <View id="picture" style={cardPosterStyles} src={getImageUrl(poster_path, "w500")} />

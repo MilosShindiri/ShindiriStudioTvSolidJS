@@ -1,14 +1,13 @@
 import { activeElement, For, Text, View } from "@lightningtv/solid";
 import { Column, Row } from "@lightningtv/solid/primitives";
 import Card from "../Home/components/Card";
-import { children, createEffect, createResource, on, Show } from "solid-js";
+import { createEffect, on, Show } from "solid-js";
 import { setBackgroundHeight, setBackgroundWidth, setGlobalBackground } from "@/state";
 import background from "../../assets/background.jpg";
-import { Background } from "@/components/Background";
 import styles from "@/styles";
 import TopChannels from "./components/TopChannels";
 import GoLiveButton from "./components/GoLiveButton";
-import LoadingScreen from "@/components/loading/Spinner";
+import { useAppNavigation } from "@/hooks/useAppNavigation";
 
 const HomeStyle = {
   fontFamily: "Inter",
@@ -23,9 +22,14 @@ const Home = props => {
   setBackgroundHeight(1080);
   setGlobalBackground(background);
 
+  const homeElFocused = () => {
+    setGlobalBackground(background);
+  };
+
+  const { toDetails } = useAppNavigation();
   return (
-    <Show when={props.data.rows[0].items()} fallback={<LoadingScreen />}>
-      <View style={styles.page} forwardFocus={1}>
+    <Show when={props.data.rows[0].items()}>
+      <View style={styles.page} forwardFocus={1} onFocus={homeElFocused}>
         {/* <Background /> */}
         <View id="gradient" width={1920} height={1080} colorTl="#151515" colorBr="#00000000" />
         <Column y={125} x={62} gap={5}>
@@ -38,7 +42,15 @@ const Home = props => {
                       {row.title}
                     </Text>
                     <Row width={1241} height={359} gap={24} scroll="none">
-                      <For each={row.items()}>{item => <Card item={item} style={styles.homeCard} />}</For>
+                      <For each={row.items()}>
+                        {item => (
+                          <Card
+                            item={item}
+                            style={styles.homeCard}
+                            onEnter={() => toDetails(item.id, row.title)}
+                          />
+                        )}
+                      </For>
                     </Row>
                   </>
                 )}

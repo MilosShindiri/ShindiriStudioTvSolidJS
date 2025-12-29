@@ -1,7 +1,9 @@
-import { useNavigate } from "@solidjs/router";
+import { useLocation, useNavigate } from "@solidjs/router";
 import { View, ElementNode } from "@lightningtv/solid";
 import { useAnnouncer, useMouse } from "@lightningtv/solid/primitives";
 import GlobalBackground from "@/components/GlobalBackground";
+import { createEffect } from "solid-js";
+import { currentPath, setCurrentPath, setPrevPath } from "@/state";
 
 declare module "@lightningtv/solid/primitives" {
   interface KeyMap {
@@ -22,9 +24,14 @@ declare global {
 const App = props => {
   // useMouse();
   const navigate = useNavigate();
+  const location = useLocation();
   const announcer = useAnnouncer();
   announcer.debug = false;
   announcer.enabled = false;
+  createEffect(() => {
+    setPrevPath(currentPath());
+    setCurrentPath(location.pathname);
+  });
 
   return (
     <View ref={window.APP} onAnnouncer={() => (announcer.enabled = !announcer.enabled)}>

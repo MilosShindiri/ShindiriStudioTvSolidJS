@@ -22,6 +22,10 @@ interface MoviesProps {
     movies: Accessor<MovieItem[] | undefined>;
   };
 }
+// import { createEffect, on, onCleanup, onMount, Show } from "solid-js";
+// import { debounce } from "@solid-primitives/scheduled";
+// import Card from "./components/Card";
+import { useAppNavigation } from "@/hooks/useAppNavigation";
 
 const MoviesStyles = {
   fontWeight: 700,
@@ -32,18 +36,25 @@ const MoviesStyles = {
 
 const Movie = (props: MoviesProps) => {
   let bg1, bg2;
+  let enabled = true;
 
   setBackgroundWidth(1920);
   setBackgroundHeight(697);
   setGlobalBackground(" ");
+  const { toDetails } = useAppNavigation();
+  const isActive = () => location.hash.endsWith("movies");
 
   const delayedBackground = debounce((img: string) => {
-    setGlobalBackground(img);
+    if (isActive()) {
+      setGlobalBackground(img);
+    }
   }, 400);
 
   const delayedTextUpdate = debounce((title: string, overview: string) => {
-    setGlobalTitle(title);
-    setGlobalOverview(overview);
+    if (isActive()) {
+      setGlobalTitle(title);
+      setGlobalOverview(overview);
+    }
   }, 400);
   onMount(async () => {
     setLoading(true);
@@ -56,8 +67,11 @@ const Movie = (props: MoviesProps) => {
   createEffect(
     on(activeElement, el => {
       const item = el?.item as MovieItem | undefined;
+      if (!enabled) return;
       if (!item?.backdrop_path) return;
 
+      setBackgroundWidth(1920);
+      setBackgroundHeight(697); // samo Movies
       const img = `https://image.tmdb.org/t/p/w1920/${item.backdrop_path}`;
       delayedBackground(img);
 
@@ -123,7 +137,17 @@ const Movie = (props: MoviesProps) => {
 
         {/* <Show when={props.data.movies()?.length}> */}
         <Row y={697} x={64} gap={24} width={1241} autofocus scroll="edge" throttleInput={200}>
-          <For each={props.data.movies() ?? []}>{item => <Card item={item} style={MoviesStyles} />}</For>
+          <For each={props.data.movies() ?? []}>
+            {item => (
+              <Card
+                item={item}
+                style={MoviesStyles}
+                onEnter={() => {
+                  toDetails(item.id, "movies");
+                }}
+              />
+            )}
+          </For>
         </Row>
         {/* </Show> */}
       </View>
