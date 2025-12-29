@@ -12,6 +12,7 @@ import { Row } from "@lightningtv/solid/primitives";
 import { createEffect, on, onMount, Show } from "solid-js";
 import { debounce } from "@solid-primitives/scheduled";
 import Card from "./components/Card";
+import { useAppNavigation } from "@/hooks/useAppNavigation";
 
 const MoviesStyles = {
   fontWeight: 700,
@@ -26,6 +27,7 @@ const Movie = props => {
   setBackgroundWidth(1920);
   setBackgroundHeight(697); // samo Movies
   setGlobalBackground(" ");
+  const { toDetails } = useAppNavigation();
 
   const delayedBackground = debounce((img: string) => {
     setGlobalBackground(img);
@@ -104,7 +106,18 @@ const Movie = props => {
 
       <Show when={props.data.movies()?.length}>
         <Row y={697} x={64} gap={24} width={1241} autofocus scroll="edge" throttleInput={200}>
-          <For each={props.data.movies() ?? []}>{item => <Card item={item} style={MoviesStyles} />}</For>
+          <For each={props.data.movies() ?? []}>
+            {item => (
+              <Card
+                item={item}
+                style={MoviesStyles}
+                onEnter={() => {
+                  console.log("object");
+                  toDetails(item.id, "movies");
+                }}
+              />
+            )}
+          </For>
         </Row>
       </Show>
     </View>

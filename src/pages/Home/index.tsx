@@ -1,14 +1,13 @@
-import { activeElement, For, Text, View } from "@lightningtv/solid";
+import { For, Text, View } from "@lightningtv/solid";
 import { Column, Row } from "@lightningtv/solid/primitives";
 import Card from "../Home/components/Card";
-import { children, createEffect, createResource, on, Show } from "solid-js";
+import { Show } from "solid-js";
 import { setBackgroundHeight, setBackgroundWidth, setGlobalBackground } from "@/state";
 import background from "../../assets/background.jpg";
-import { Background } from "@/components/Background";
 import styles from "@/styles";
 import TopChannels from "./components/TopChannels";
 import GoLiveButton from "./components/GoLiveButton";
-import { useNavigate } from "@solidjs/router";
+import { useAppNavigation } from "@/hooks/useAppNavigation";
 
 const HomeStyle = {
   fontFamily: "Inter",
@@ -22,12 +21,7 @@ const Home = props => {
   setBackgroundWidth(1920);
   setBackgroundHeight(1080);
   setGlobalBackground(background);
-  const navigate = useNavigate();
-
-  function navigateToDetails(id, title) {
-    navigate("/" + title.toLowerCase() + "/details/" + id);
-  }
-
+  const { toDetails } = useAppNavigation();
   return (
     <Show when={props.data.rows[0].items()}>
       <View style={styles.page} forwardFocus={1}>
@@ -48,7 +42,7 @@ const Home = props => {
                           <Card
                             item={item}
                             style={styles.homeCard}
-                            onEnter={() => navigateToDetails(item.id, row.title)}
+                            onEnter={() => toDetails(item.id, row.title)}
                           />
                         )}
                       </For>
