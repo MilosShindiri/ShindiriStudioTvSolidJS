@@ -10,11 +10,18 @@ import {
 } from "@/state";
 import { View, Text, For, activeElement } from "@lightningtv/solid";
 import { Row } from "@lightningtv/solid/primitives";
-import { createEffect, on, onMount, Show, Suspense } from "solid-js";
+import { Accessor, createEffect, on, onMount, Show, Suspense } from "solid-js";
 import { debounce } from "@solid-primitives/scheduled";
 import Card from "./components/Card";
 import { moviesData } from "../../api/services/MediaServices";
 import LoadingScreen from "../../components/loading/Spinner";
+import { MovieItem } from "@/types/movie";
+
+interface MoviesProps {
+  data: {
+    movies: Accessor<MovieItem[] | undefined>;
+  };
+}
 
 const MoviesStyles = {
   fontWeight: 700,
@@ -23,7 +30,7 @@ const MoviesStyles = {
   color: "#FFFFFF",
 } as const;
 
-const Movie = props => {
+const Movie = (props: MoviesProps) => {
   let bg1, bg2;
 
   setBackgroundWidth(1920);
@@ -45,14 +52,16 @@ const Movie = props => {
 
     setLoading(false);
   });
+
   createEffect(
     on(activeElement, el => {
-      if (!el?.item?.backdrop_path) return;
+      const item = el?.item as MovieItem | undefined;
+      if (!item?.backdrop_path) return;
 
-      const img = `https://image.tmdb.org/t/p/w1920/${el.item.backdrop_path}`;
+      const img = `https://image.tmdb.org/t/p/w1920/${item.backdrop_path}`;
       delayedBackground(img);
 
-      delayedTextUpdate(el.item.title || el.item.name || "", el.item.overview || "");
+      delayedTextUpdate(item.title || item.name || "", item.overview || "");
     }),
   );
 
