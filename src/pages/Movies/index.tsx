@@ -1,4 +1,5 @@
 import {
+  currentPath,
   globalOverview,
   globalTitle,
   setBackgroundHeight,
@@ -9,23 +10,20 @@ import {
   setLoading,
 } from "@/state";
 import { View, Text, For, activeElement } from "@lightningtv/solid";
-import { Row } from "@lightningtv/solid/primitives";
+import { removeKeepAlive, Row } from "@lightningtv/solid/primitives";
 import { Accessor, createEffect, on, onMount, Show, Suspense } from "solid-js";
 import { debounce } from "@solid-primitives/scheduled";
 import Card from "./components/Card";
 import { moviesData } from "../../api/services/MediaServices";
 import LoadingScreen from "../../components/loading/Spinner";
 import { MovieItem } from "@/types/movie";
+import { useAppNavigation } from "@/hooks/useAppNavigation";
 
 interface MoviesProps {
   data: {
     movies: Accessor<MovieItem[] | undefined>;
   };
 }
-// import { createEffect, on, onCleanup, onMount, Show } from "solid-js";
-// import { debounce } from "@solid-primitives/scheduled";
-// import Card from "./components/Card";
-import { useAppNavigation } from "@/hooks/useAppNavigation";
 
 const MoviesStyles = {
   fontWeight: 700,
@@ -65,9 +63,28 @@ const Movie = (props: MoviesProps) => {
   });
 
   createEffect(
+    on(
+      () => (currentPath() === "/movies" ? activeElement() : null),
+      el => {
+        console.log("asdf upad u efekat ON, prevPath: ", currentPath());
+        if (!el) return;
+
+        const item = el.item as MovieItem | undefined;
+        if (!item?.backdrop_path) return;
+
+        setBackgroundWidth(1920);
+        setBackgroundHeight(697);
+        delayedBackground(`https://image.tmdb.org/t/p/w1920/${item.backdrop_path}`);
+        delayedTextUpdate(item.title || item.name || "", item.overview || "");
+      },
+    ),
+  );
+
+  /* createEffect(
     on(activeElement, el => {
-      const item = el?.item as MovieItem | undefined;
+      console.log("asdf upad u efekat ON");
       if (!enabled) return;
+      const item = el?.item as MovieItem | undefined;
       if (!item?.backdrop_path) return;
 
       setBackgroundWidth(1920);
@@ -77,7 +94,7 @@ const Movie = (props: MoviesProps) => {
 
       delayedTextUpdate(item.title || item.name || "", item.overview || "");
     }),
-  );
+  ); */
 
   return (
     <Show when={props.data.movies()?.length} fallback={<LoadingScreen />}>

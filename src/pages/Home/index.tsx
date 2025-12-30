@@ -1,5 +1,5 @@
 import { activeElement, For, Text, View } from "@lightningtv/solid";
-import { Column, Row } from "@lightningtv/solid/primitives";
+import { Column, removeKeepAlive, Row } from "@lightningtv/solid/primitives";
 import Card from "../Home/components/Card";
 import { createEffect, on, Show } from "solid-js";
 import { setBackgroundHeight, setBackgroundWidth, setGlobalBackground } from "@/state";
@@ -26,6 +26,8 @@ const Home = props => {
   const homeElFocused = () => {
     setGlobalBackground(background);
   };
+
+  removeKeepAlive("movies");
 
   const { toDetails } = useAppNavigation();
   return (
