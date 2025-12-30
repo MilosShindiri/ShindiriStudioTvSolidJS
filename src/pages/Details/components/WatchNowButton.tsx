@@ -1,5 +1,6 @@
 import { View, Text } from "@lightningtv/solid";
 import play from "/static/images/play.png";
+import { useNavigate } from "@solidjs/router";
 
 const WatchNowButtonStyle = {
   width: 286,
@@ -23,8 +24,15 @@ const WatchNowLabelStyle = {
   letterSpacing: 0.08,
 } as const;
 const WatchNowButton = props => {
+  const navigate = useNavigate();
   return (
-    <View style={WatchNowButtonStyle}>
+    <View
+      style={WatchNowButtonStyle}
+      onEnter={() => {
+        console.log("object");
+        navigate(`/player`);
+      }}
+    >
       <View src={play} width={24} height={24} />
       <Text style={WatchNowLabelStyle}>WATCH NOW</Text>
     </View>

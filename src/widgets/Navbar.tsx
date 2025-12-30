@@ -24,7 +24,7 @@ const Navbar = props => {
 
       <View x={32} y={32} src={logo} width={301} height={60} zIndex={200} />
 
-      <Row x={400} y={37} gap={20} autofocus ref={navbar} zIndex={200}>
+      <Row x={400} y={37} gap={20} ref={navbar} zIndex={200}>
         <For each={menuItems}>
           {item => (
             <Button

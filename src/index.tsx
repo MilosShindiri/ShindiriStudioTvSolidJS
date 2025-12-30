@@ -18,6 +18,7 @@ import Home from "./pages/Home";
 import Movies from "./pages/Movies";
 import Details from "./pages/Details";
 import { prevPath } from "./state";
+import Player from "./pages/Player";
 
 merge(LightningConfig, config.lightning);
 
@@ -29,7 +30,7 @@ render(() => {
   return (
     <FocusStackProvider>
       <HashRouter root={App}>
-        <KeepAliveRoute path="" component={Navbar}>
+        <KeepAliveRoute id="navbar" path="" component={Navbar}>
           <KeepAliveRoute
             id="home"
             path="/"
@@ -48,6 +49,9 @@ render(() => {
 
         {/* Details NE sme biti keep alive */}
         <Route path="/:mediaType/details/:id" component={Details} />
+        <Route path="player">
+          <Route component={Player} />
+        </Route>
       </HashRouter>
     </FocusStackProvider>
   );

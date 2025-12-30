@@ -46,7 +46,7 @@ const GlobalBackground = () => {
 
   return (
     <View width={backgroundWidth()} height={backgroundHeight()}>
-      <View width={backgroundWidth()} height={backgroundHeight()} color="#141217" />
+      {/* <View width={backgroundWidth()} height={backgroundHeight()} /> */}
 
       <View
         ref={bg1}
