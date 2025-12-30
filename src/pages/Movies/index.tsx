@@ -35,6 +35,7 @@ const MoviesStyles = {
 const Movie = (props: MoviesProps) => {
   let bg1, bg2;
   let enabled = true;
+  let wrapper, assetCARD;
 
   setBackgroundWidth(1920);
   setBackgroundHeight(697);
@@ -64,11 +65,15 @@ const Movie = (props: MoviesProps) => {
 
   createEffect(
     on(
-      () => (currentPath() === "/movies" ? activeElement() : null),
+      activeElement,
       el => {
+        console.log("asdf wrapper: ", assetCARD);
+        if (currentPath() !== "/movies") return;
+        if (!enabled) return;
+        // if (!el) return;
         console.log("asdf upad u efekat ON, prevPath: ", currentPath());
         if (!el) return;
-
+        console.log("asdf upad 2");
         const item = el.item as MovieItem | undefined;
         if (!item?.backdrop_path) return;
 
@@ -77,8 +82,28 @@ const Movie = (props: MoviesProps) => {
         delayedBackground(`https://image.tmdb.org/t/p/w1920/${item.backdrop_path}`);
         delayedTextUpdate(item.title || item.name || "", item.overview || "");
       },
+      { defer: true },
     ),
   );
+
+  //   createEffect(
+  //   on(
+  //     () => (currentPath() === "/movies" ? activeElement() : null),
+  //     el => {
+  //       console.log("asdf upad u efekat ON, prevPath: ", currentPath());
+  //       if (!el) return;
+
+  //       const item = el.item as MovieItem | undefined;
+  //       if (!item?.backdrop_path) return;
+
+  //       setBackgroundWidth(1920);
+  //       setBackgroundHeight(697);
+  //       delayedBackground(`https://image.tmdb.org/t/p/w1920/${item.backdrop_path}`);
+  //       delayedTextUpdate(item.title || item.name || "", item.overview || "");
+  //     },
+  //     { defer: true },
+  //   ),
+  // );
 
   /* createEffect(
     on(activeElement, el => {
@@ -98,7 +123,7 @@ const Movie = (props: MoviesProps) => {
 
   return (
     <Show when={props.data.movies()?.length} fallback={<LoadingScreen />}>
-      <View forwardFocus={6}>
+      <View forwardFocus={6} ref={wrapper}>
         <View
           ref={bg1}
           width={1920}
@@ -162,6 +187,7 @@ const Movie = (props: MoviesProps) => {
                 onEnter={() => {
                   toDetails(item.id, "movies");
                 }}
+                ref={assetCARD}
               />
             )}
           </For>
