@@ -24,6 +24,9 @@ const buttonStyle = {
 
 const Player = () => {
   let parent;
+  let backBtnRef;
+  let centerRowRef;
+
   const navigate = useNavigate();
   const [playing, setPlaying] = createSignal(true);
 
@@ -86,10 +89,38 @@ const Player = () => {
           destroy();
         }}
       >
-        <Column width={1680} height={156} x={115} y={836} color={"#0000000"}>
-          <Row width={995} height={90} justifyContent="spaceBetween" alignItems="center">
-            <View style={buttonStyle} src={PLAYER_BASE + "back.png"} onEnter={_handleBack} />
-            <Row alignItems="center" autofocus selected={1} scroll="none">
+        <Column width={1680} height={126} x={115} y={836} color={"#0000000"} scroll="none">
+          {/* Row za back dugme */}
+          {/* <Row width={1680} height={90} alignItems="center" ref={backBtnRef}> */}
+          <View>
+            <View
+              style={buttonStyle}
+              src={PLAYER_BASE + "back.png"}
+              onEnter={_handleBack}
+              ref={backBtnRef}
+              onRight={() => {
+                centerRowRef?.setFocus();
+              }}
+            />
+            {/* </Row> */}
+
+            {/* Row za centralna dugmad */}
+            <Row
+              ref={centerRowRef}
+              width={1680}
+              height={60}
+              alignItems="center"
+              justifyContent="center"
+              scroll="none"
+              autofocus
+              selected={1}
+              onLeft={() => {
+                backBtnRef?.setFocus();
+              }}
+              onUp={e => {
+                e.stopPropagation();
+              }}
+            >
               <View
                 style={buttonStyle}
                 src={PLAYER_BASE + "rewind.png"}
@@ -112,7 +143,7 @@ const Player = () => {
                 height={66}
               />
             </Row>
-          </Row>
+          </View>
         </Column>
       </View>
     </Show>
