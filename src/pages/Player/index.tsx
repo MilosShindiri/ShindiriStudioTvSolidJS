@@ -16,6 +16,7 @@ import {
   play,
   pause,
   isPlaying,
+  isBuffering,
   currentTime,
   duration,
   forward,
@@ -100,87 +101,102 @@ const Player = () => {
   });
 
   return (
-    <Show when={!isLoading()} fallback={<LoadingScreen />}>
-      <View
-        onBackspace={() => {
-          navigate(-1);
-          destroy();
-        }}
-      >
-        <View id="gradient" width={1920} height={1080} colorBottom="#000000" colorTop="#0000000" />
-        <Column width={1680} height={126} x={115} y={836} color={"#0000000"} scroll="none">
-          <View>
-            <View
-              style={buttonStyle}
-              src={PLAYER_BASE + "back.png"}
-              onEnter={_handleBack}
-              ref={backBtnRef}
-              onRight={() => {
-                centerRowRef?.setFocus();
-              }}
-            />
-            {/* </Row> */}
-
-            {/* Row za centralna dugmad */}
-            <Row
-              ref={centerRowRef}
-              width={1690}
-              height={60}
-              alignItems="center"
-              justifyContent="center"
-              scroll="none"
-              autofocus
-              selected={1}
-              onLeft={() => {
-                backBtnRef?.setFocus();
-              }}
-              onUp={e => {
-                e.stopPropagation();
-              }}
-            >
-              <View
-                style={buttonStyle}
-                src={PLAYER_BASE + "rewind.png"}
-                onEnter={_handleBackwards}
-                width={66}
-                height={66}
-              />
-              <View
-                style={buttonStyle}
-                src={PLAYER_BASE + (isPlaying() ? "pause.png" : "play.png")}
-                onEnter={_handlePlayPause}
-                width={90}
-                height={90}
-              />
-              <View
-                style={buttonStyle}
-                src={PLAYER_BASE + "forward.png"}
-                onEnter={_handleForwards}
-                width={66}
-                height={66}
-              />
-            </Row>
-          </View>
+    <>
+      <Show when={!isLoading()}>
+        <View
+          onBackspace={() => {
+            navigate(-1);
+            destroy();
+          }}
+        >
+          <View id="gradient" width={1920} height={1080} colorBottom="#000000" colorTop="#0000000" />
           <View
-            height={31}
-            display="flex"
-            flexDirection="row"
-            justifyContent="spaceBetween"
-            alignItems="center"
+            display={"flex"}
+            flexDirection="column"
+            justifyContent="center"
+            width={1680}
+            height={126}
+            x={115}
+            y={836}
+            color={"#0000000"}
+            scroll="none"
           >
-            <Text style={timeLabelStyle} width={119} height={31}>
-              {formatTimeHMS(currentTime())}
-            </Text>
-            <View width={1404} height={9} color={"#d9d9d91c"}>
-              <View color={"#ED1C24"} width={(currentTime() / duration()) * 1404}></View>
+            <View>
+              <View
+                style={buttonStyle}
+                src={PLAYER_BASE + "back.png"}
+                onEnter={_handleBack}
+                ref={backBtnRef}
+                onRight={() => {
+                  centerRowRef?.setFocus();
+                }}
+              />
+              {/* </Row> */}
+
+              {/* Row za centralna dugmad */}
+              <Row
+                ref={centerRowRef}
+                width={1690}
+                height={60}
+                alignItems="center"
+                justifyContent="center"
+                scroll="none"
+                autofocus
+                selected={1}
+                onLeft={() => {
+                  backBtnRef?.setFocus();
+                }}
+                onUp={e => {
+                  e.stopPropagation();
+                }}
+              >
+                <View
+                  style={buttonStyle}
+                  src={PLAYER_BASE + "rewind.png"}
+                  onEnter={_handleBackwards}
+                  width={66}
+                  height={66}
+                />
+                <View
+                  style={buttonStyle}
+                  src={PLAYER_BASE + (isPlaying() ? "pause.png" : "play.png")}
+                  onEnter={_handlePlayPause}
+                  width={90}
+                  height={90}
+                />
+                <View
+                  style={buttonStyle}
+                  src={PLAYER_BASE + "forward.png"}
+                  onEnter={_handleForwards}
+                  width={66}
+                  height={66}
+                />
+              </Row>
             </View>
-            <Text style={timeLabelStyle} width={119} height={31}>
-              {formatTimeHMS(duration())}
-            </Text>
+            <View
+              height={31}
+              display="flex"
+              flexDirection="row"
+              justifyContent="spaceBetween"
+              alignItems="center"
+            >
+              <Text style={timeLabelStyle} width={119} height={31}>
+                {formatTimeHMS(currentTime())}
+              </Text>
+              <View width={1404} height={9} color={"#d9d9d91c"}>
+                <View color={"#ED1C24"} width={(currentTime() / duration()) * 1404}></View>
+              </View>
+              <Text style={timeLabelStyle} width={119} height={31}>
+                {formatTimeHMS(duration())}
+              </Text>
+            </View>
           </View>
-        </Column>
-      </View>
-    </Show>
+        </View>
+      </Show>
+      <Show when={isBuffering()}>
+        <LoadingScreen />
+      </Show>
+    </>
   );
 };
 

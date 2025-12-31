@@ -7,6 +7,7 @@ let videoElement;
 export const [isPlaying, setIsPlaying] = createSignal(false);
 export const [currentTime, setCurrentTime] = createSignal(0);
 export const [duration, setDuration] = createSignal(0);
+export const [isBuffering, setIsBuffering] = createSignal(false);
 
 const bindVideoEvents = () => {
   videoElement.addEventListener("playing", () => {
@@ -24,6 +25,15 @@ const bindVideoEvents = () => {
   videoElement.addEventListener("loadedmetadata", () => {
     setDuration(videoElement.duration);
     setLoading(false);
+    setIsBuffering(false);
+  });
+
+  videoElement.addEventListener("canplay", () => {
+    setIsBuffering(false);
+  });
+
+  videoElement.addEventListener("seeking", () => {
+    setIsBuffering(true);
   });
 };
 
@@ -110,4 +120,5 @@ export default {
   forward,
   backward,
   isPlaying,
+  isBuffering,
 };
