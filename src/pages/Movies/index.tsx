@@ -1,18 +1,21 @@
 import {
-  currentPath,
   globalOverview,
   globalTitle,
+  moviesSelectedIndex,
   setBackgroundHeight,
   setBackgroundWidth,
   setGlobalBackground,
   setGlobalOverview,
   setGlobalTitle,
+  setMoviesSelectedIndex,
   setLoading,
 } from "@/state";
-import { View, Text, For, activeElement } from "@lightningtv/solid";
-import { removeKeepAlive, Row } from "@lightningtv/solid/primitives";
-import { Accessor, createEffect, on, onMount, Show, Suspense } from "solid-js";
+
+import { View, Text, For } from "@lightningtv/solid";
+import { Row } from "@lightningtv/solid/primitives";
+import { Accessor, onMount, Show } from "solid-js";
 import { debounce } from "@solid-primitives/scheduled";
+
 import Card from "./components/Card";
 import { moviesData } from "../../api/services/MediaServices";
 import LoadingScreen from "../../components/loading/Spinner";
@@ -32,15 +35,15 @@ const MoviesStyles = {
   color: "#FFFFFF",
 } as const;
 
-const Movie = (props: MoviesProps) => {
-  let bg1, bg2;
-  let enabled = true;
-  let wrapper, assetCARD;
+const Movies = (props: MoviesProps) => {
+  const { toDetails } = useAppNavigation();
 
+  // ---- GLOBAL PAGE SETUP ----
   setBackgroundWidth(1920);
   setBackgroundHeight(697);
   setGlobalBackground(" ");
-  const { toDetails } = useAppNavigation();
+
+  // ---- DEBOUNCED UPDATES ----
   const isActive = () => location.hash.endsWith("movies");
 
   const delayedBackground = debounce((img: string) => {
@@ -55,91 +58,27 @@ const Movie = (props: MoviesProps) => {
       setGlobalOverview(overview);
     }
   }, 400);
-  onMount(async () => {
-    setLoading(true);
+  // ---- INITIAL LOAD ----
+  onMount(() => {
+    setMoviesSelectedIndex(0); // resetujemo na prvi element svaki put kada se mountuje
 
-    await moviesData();
+    const list = props.data.movies?.();
+    if (!list?.length) return;
 
-    setLoading(false);
+    const item = list[0]; // prvi film
+    if (!item?.backdrop_path) return;
+
+    setBackgroundWidth(1920);
+    setBackgroundHeight(697);
+    setGlobalBackground(`https://image.tmdb.org/t/p/w300/${item.backdrop_path}`);
+    setGlobalTitle(item.title || item.name || "");
+    setGlobalOverview(item.overview || "");
   });
-
-  createEffect(
-    on(
-      activeElement,
-      el => {
-        console.log("asdf wrapper: ", assetCARD);
-        if (currentPath() !== "/movies") return;
-        if (!enabled) return;
-        // if (!el) return;
-        console.log("asdf upad u efekat ON, prevPath: ", currentPath());
-        if (!el) return;
-        console.log("asdf upad 2");
-        const item = el.item as MovieItem | undefined;
-        if (!item?.backdrop_path) return;
-
-        setBackgroundWidth(1920);
-        setBackgroundHeight(697);
-        delayedBackground(`https://image.tmdb.org/t/p/w300/${item.backdrop_path}`);
-        delayedTextUpdate(item.title || item.name || "", item.overview || "");
-      },
-      { defer: true },
-    ),
-  );
-
-  //   createEffect(
-  //   on(
-  //     () => (currentPath() === "/movies" ? activeElement() : null),
-  //     el => {
-  //       console.log("asdf upad u efekat ON, prevPath: ", currentPath());
-  //       if (!el) return;
-
-  //       const item = el.item as MovieItem | undefined;
-  //       if (!item?.backdrop_path) return;
-
-  //       setBackgroundWidth(1920);
-  //       setBackgroundHeight(697);
-  //       delayedBackground(`https://image.tmdb.org/t/p/w1920/${item.backdrop_path}`);
-  //       delayedTextUpdate(item.title || item.name || "", item.overview || "");
-  //     },
-  //     { defer: true },
-  //   ),
-  // );
-
-  /* createEffect(
-    on(activeElement, el => {
-      console.log("asdf upad u efekat ON");
-      if (!enabled) return;
-      const item = el?.item as MovieItem | undefined;
-      if (!item?.backdrop_path) return;
-
-      setBackgroundWidth(1920);
-      setBackgroundHeight(697); // samo Movies
-      const img = `https://image.tmdb.org/t/p/w1920/${item.backdrop_path}`;
-      delayedBackground(img);
-
-      delayedTextUpdate(item.title || item.name || "", item.overview || "");
-    }),
-  ); */
 
   return (
     <Show when={props.data.movies()?.length} fallback={<LoadingScreen />}>
-      <View forwardFocus={6} ref={wrapper}>
-        <View
-          ref={bg1}
-          width={1920}
-          height={697}
-          alpha={0}
-          textureOptions={{ resizeMode: { type: "contain" } }}
-        />
-        <View
-          ref={bg2}
-          width={1920}
-          height={697}
-          alpha={0}
-          textureOptions={{ resizeMode: { type: "contain" } }}
-        />
-
-        {/* Gradient 1 – dijagonalni (82.93deg) */}
+      <View forwardFocus={4} focusable>
+        {/* ---- GRADIENTS ---- */}
         <View
           width={1920}
           height={1080}
@@ -149,7 +88,6 @@ const Movie = (props: MoviesProps) => {
           colorBr="rgba(21,21,21,0.6)"
         />
 
-        {/* Gradient 2 – top fade (357.53deg) */}
         <View
           width={1920}
           height={1080}
@@ -159,6 +97,7 @@ const Movie = (props: MoviesProps) => {
           colorBr="rgba(21,21,21,0)"
         />
 
+        {/* ---- TEXT ---- */}
         <Text x={69} y={258} fontSize={28} fontWeight={600} color="#FFFFFF" fontFamily="Inter">
           {globalTitle()}
         </Text>
@@ -177,29 +116,38 @@ const Movie = (props: MoviesProps) => {
           {globalOverview()}
         </Text>
 
-        {/* <Show when={props.data.movies()?.length}> */}
-        <Row y={697} x={64} gap={24} width={1241} autofocus scroll="edge" throttleInput={200}>
+        {/* ---- MOVIES ROW ---- */}
+        <Row
+          y={697}
+          x={64}
+          gap={24}
+          width={1241}
+          scroll="edge"
+          throttleInput={200}
+          autofocus
+          selected={moviesSelectedIndex()}
+          onSelectedChanged={(index, row, active, lastSelected) => {
+            console.log("ROW SELECTED:", index);
+            setMoviesSelectedIndex(index);
+
+            const el = row.children[index];
+            const item = el?.item as MovieItem | undefined;
+            if (!item?.backdrop_path) return;
+
+            setBackgroundWidth(1920);
+            setBackgroundHeight(697);
+
+            delayedBackground(`https://image.tmdb.org/t/p/w300/${item.backdrop_path}`);
+            delayedTextUpdate(item.title || item.name || "", item.overview || "");
+          }}
+        >
           <For each={props.data.movies() ?? []}>
-            {item => (
-              <Card
-                item={item}
-                style={MoviesStyles}
-                onEnter={() => {
-                  toDetails(item.id, "movies");
-                }}
-                ref={assetCARD}
-              />
-            )}
+            {item => <Card item={item} style={MoviesStyles} onEnter={() => toDetails(item.id, "movies")} />}
           </For>
         </Row>
-        {/* </Show> */}
       </View>
     </Show>
   );
 };
 
-export default Movie;
-
-/* You have also global throttling */
-
-/* scroll atributes: 'auto' | 'always' | 'edge' | 'center' | 'none' */
+export default Movies;
