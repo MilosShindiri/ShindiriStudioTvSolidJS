@@ -1,6 +1,4 @@
-import Hls from "hls.js/dist/hls.js";
-import shaka from "shaka-player";
-
+import Hls from "hls.js";
 let player;
 let videoElement;
 
@@ -15,32 +13,23 @@ export const init = async element => {
     enableWorker: false,
     maxBufferLength: 30,
   });
-
   videoElement = element;
 
   if (!videoElement) {
     videoElement = document.createElement("video");
 
-    videoElement.style.cssText = "position: absolute; top: 0; left: 0; z-index: -1";
+    videoElement.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1";
 
-    videoElement.width = window.innerWidth;
-    videoElement.height = window.innerHeight;
-
-    videoElement.autoplay = true;
+    videoElement.autoplay = false;
     videoElement.preload = true;
-    videoElement.muted = false;
+    videoElement.muted = true;
+    videoElement.playsInline = true;
+    videoElement.setAttribute("webkit-playsinline", "true");
 
-    player.on(Hls.Events.ERROR, err => {
-      console.error(err);
-    });
     document.body.insertBefore(videoElement, document.body.firstChild);
   }
 };
-/**
- * Loads the player.
- * @param {Object} config - The player configuration.
- * @returns {Promise<void>}
- */
+
 export const load = async config => {
   if (!player || !videoElement) {
     throw "Player not initialized yet";
@@ -50,10 +39,9 @@ export const load = async config => {
   player.loadSource(config.streamUrl);
 };
 
-export const play = () => {
-  videoElement.play().then(() => {
-    state.playingState = true;
-  });
+export const play = async () => {
+  await videoElement.play().catch(() => {});
+  state.playingState = true;
 };
 
 export const pause = () => {
@@ -61,37 +49,33 @@ export const pause = () => {
   state.playingState = false;
 };
 
-export const destroy = async () => {
-  await player.destroy();
-
-  player = null;
-  videoElement.remove();
-  videoElement = null;
+export const destroy = () => {
+  if (videoElement) {
+    videoElement.pause();
+    videoElement.remove();
+    videoElement = null;
+  }
 };
 
-export const getCurrentTime = () => {
-  return videoElement.currentTime;
+export const forward = () => {
+  if (videoElement) {
+    videoElement.currentTime = Math.min(videoElement.currentTime + 5, videoElement.duration);
+  }
 };
 
-export const getVideoDuration = () => {
-  return videoElement.duration;
+export const backward = () => {
+  if (videoElement) {
+    videoElement.currentTime = videoElement.currentTime - 5;
+  }
 };
+
+export const getCurrentTime = () => videoElement.currentTime;
+
+export const getVideoDuration = () => videoElement.duration;
 
 export const getTimeFormat = () => {
-  let secondsToMmSs = seconds => new Date(seconds * 1000).toISOString().substr(14, 5);
-  return `${secondsToMmSs(videoElement.currentTime)} : ${secondsToMmSs(Math.floor(videoElement.duration))}`;
-};
-
-export const seekForward = (seconds = 30) => {
-  if (videoElement) {
-    videoElement.currentTime = Math.min(videoElement.currentTime + seconds, videoElement.duration);
-  }
-};
-
-export const seekBackward = (seconds = 10) => {
-  if (videoElement) {
-    videoElement.currentTime = Math.max(videoElement.currentTime - seconds, 0);
-  }
+  const f = s => new Date(s * 1000).toISOString().substr(14, 5);
+  return `${f(videoElement.currentTime)} : ${f(Math.floor(videoElement.duration))}`;
 };
 
 export default {
@@ -104,4 +88,6 @@ export default {
   getTimeFormat,
   state,
   destroy,
+  forward,
+  backward,
 };

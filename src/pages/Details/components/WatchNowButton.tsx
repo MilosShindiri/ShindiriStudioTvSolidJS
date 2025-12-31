@@ -29,7 +29,6 @@ const WatchNowButton = props => {
     <View
       style={WatchNowButtonStyle}
       onEnter={() => {
-        console.log("object");
         navigate(`/player`);
       }}
     >
