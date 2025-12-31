@@ -1,6 +1,6 @@
 import { View, Text } from "@lightningtv/solid";
 import { onMount, onCleanup } from "solid-js";
-import spinnerSrc from "../../assets/zabrinutiMita.png";
+import spinnerSrc from "/static/images/zabrinutiMita.png";
 
 interface LoadingScreenProps {
   xPos?: number;
@@ -50,7 +50,7 @@ const LoadingScreen = (props: LoadingScreenProps) => {
     <View width={width} height={height} rect color="#000000" zIndex={200} alpha={1}>
       <View
         ref={spinnerRef}
-        src={spinnerSrc}
+        src="/static/images/zabrinutiMita.png"
         width={120}
         height={120}
         zIndex={200}

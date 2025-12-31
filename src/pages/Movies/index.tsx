@@ -79,7 +79,7 @@ const Movie = (props: MoviesProps) => {
 
         setBackgroundWidth(1920);
         setBackgroundHeight(697);
-        delayedBackground(`https://image.tmdb.org/t/p/w1920/${item.backdrop_path}`);
+        delayedBackground(`https://image.tmdb.org/t/p/w300/${item.backdrop_path}`);
         delayedTextUpdate(item.title || item.name || "", item.overview || "");
       },
       { defer: true },

@@ -24,6 +24,12 @@ declare global {
 const App = props => {
   // useMouse();
   const navigate = useNavigate();
+
+  const goBack = () => {
+    navigate(-1);
+    return true;
+  };
+
   const location = useLocation();
   const announcer = useAnnouncer();
   announcer.debug = false;
@@ -34,7 +40,17 @@ const App = props => {
   });
 
   return (
-    <View ref={window.APP} onAnnouncer={() => (announcer.enabled = !announcer.enabled)}>
+    <View
+      ref={window.APP}
+      onAnnouncer={() => (announcer.enabled = !announcer.enabled)}
+      onLast={() => history.back()}
+      onLeft={() => console.log("LEFT")}
+      onRight={() => console.log("RIGHT")}
+      onUp={() => console.log("UP")}
+      onDown={() => console.log("DOWN")}
+      onEnter={() => console.log("ENTER")}
+      onBack={goBack}
+    >
       {/* Global background uvek prvi */}
       <GlobalBackground />
       {/* Ostali UI */}

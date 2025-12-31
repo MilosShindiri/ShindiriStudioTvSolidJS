@@ -3,7 +3,7 @@ import { Column, removeKeepAlive, Row } from "@lightningtv/solid/primitives";
 import Card from "../Home/components/Card";
 import { createEffect, on, Show } from "solid-js";
 import { setBackgroundHeight, setBackgroundWidth, setGlobalBackground } from "@/state";
-import background from "../../assets/background.jpg";
+import background from "/static/images/background.jpg";
 import styles from "@/styles";
 import TopChannels from "./components/TopChannels";
 import GoLiveButton from "./components/GoLiveButton";
@@ -21,10 +21,10 @@ const HomeStyle = {
 const Home = props => {
   setBackgroundWidth(1920);
   setBackgroundHeight(1080);
-  setGlobalBackground(background);
+  setGlobalBackground("/static/images/background.jpg");
 
   const homeElFocused = () => {
-    setGlobalBackground(background);
+    setGlobalBackground("/static/images/background.jpg");
   };
 
   removeKeepAlive("movies");

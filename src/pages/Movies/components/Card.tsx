@@ -47,7 +47,7 @@ const Card = props => {
       onEnter={() => props.onEnter()}
       // autofocus={props.autofocus}
     >
-      <View id="picture" style={cardPosterStyles} src={getImageUrl(poster_path, "w500")} />
+      <View id="picture" style={cardPosterStyles} src={getImageUrl(poster_path, "w92")} />
       <Text id="text" y={props.style.height} width={props.style.width} style={CardTextStyles}>
         {title}
       </Text>

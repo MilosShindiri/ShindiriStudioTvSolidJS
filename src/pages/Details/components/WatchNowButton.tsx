@@ -1,5 +1,5 @@
 import { View, Text } from "@lightningtv/solid";
-import play from "/static/images/play.png";
+import play from "../../../../public/static/images/play.png";
 
 const WatchNowButtonStyle = {
   width: 286,
