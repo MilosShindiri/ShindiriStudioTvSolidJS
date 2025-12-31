@@ -1,9 +1,30 @@
+import { setLoading } from "@/state";
 import Hls from "hls.js";
+import { createSignal } from "solid-js";
 let player;
 let videoElement;
 
-export const state = {
-  playingState: false,
+export const [isPlaying, setIsPlaying] = createSignal(false);
+export const [currentTime, setCurrentTime] = createSignal(0);
+export const [duration, setDuration] = createSignal(0);
+
+const bindVideoEvents = () => {
+  videoElement.addEventListener("playing", () => {
+    setIsPlaying(true);
+  });
+
+  videoElement.addEventListener("pause", () => {
+    setIsPlaying(false);
+  });
+
+  videoElement.addEventListener("timeupdate", () => {
+    setCurrentTime(videoElement.currentTime);
+  });
+
+  videoElement.addEventListener("loadedmetadata", () => {
+    setDuration(videoElement.duration);
+    setLoading(false);
+  });
 };
 
 export const init = async element => {
@@ -28,6 +49,7 @@ export const init = async element => {
 
     document.body.insertBefore(videoElement, document.body.firstChild);
   }
+  bindVideoEvents();
 };
 
 export const load = async config => {
@@ -41,12 +63,10 @@ export const load = async config => {
 
 export const play = async () => {
   await videoElement.play().catch(() => {});
-  state.playingState = true;
 };
 
 export const pause = () => {
   videoElement.pause();
-  state.playingState = false;
 };
 
 export const destroy = () => {
@@ -83,11 +103,11 @@ export default {
   load,
   play,
   pause,
-  getCurrentTime,
-  getVideoDuration,
+  currentTime,
+  duration,
   getTimeFormat,
-  state,
   destroy,
   forward,
   backward,
+  isPlaying,
 };

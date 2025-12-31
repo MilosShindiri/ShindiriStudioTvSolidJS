@@ -5,12 +5,24 @@ import {
   View,
   hexColor,
 } from "@lightningtv/solid";
-import { createSignal, For, onMount, Show } from "solid-js";
+import { createEffect, createSignal, For, onMount, Show } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import { Column, removeKeepAlive, Row } from "@lightningtv/solid/primitives";
 import { isLoading, setGlobalBackground, setLoading } from "@/state";
-import { destroy, init, load, play, pause, state, forward, backward } from "./hlsConfig";
+import {
+  destroy,
+  init,
+  load,
+  play,
+  pause,
+  isPlaying,
+  currentTime,
+  duration,
+  forward,
+  backward,
+} from "./hlsConfig";
 import LoadingScreen from "../../components/loading/Spinner";
+import formatTimeHMS from "../../utils/formatTimeHMS";
 const PLAYER_BASE = "static/images/player/";
 
 const buttonStyle = {
@@ -22,20 +34,27 @@ const buttonStyle = {
   },
 };
 
+const timeLabelStyle = {
+  fontFace: "Inter",
+  fontWeight: 700,
+  fontSize: 26,
+  lineHeight: 1,
+  letterSpacing: 0,
+};
+
 const Player = () => {
   let parent;
   let backBtnRef;
   let centerRowRef;
 
   const navigate = useNavigate();
-  const [playing, setPlaying] = createSignal(true);
-
+  createEffect(() => {
+    console.log(currentTime() / duration());
+  });
   const _handlePlayPause = () => {
-    if (state.playingState) {
-      setPlaying(false);
+    if (isPlaying()) {
       pause();
     } else {
-      setPlaying(true);
       play();
     }
   };
@@ -69,16 +88,15 @@ const Player = () => {
     });
 
     const video = document.querySelector("video");
-    video?.addEventListener(
-      "playing",
-      () => {
-        setLoading(false);
-      },
-      { once: true },
-    );
+    // video?.addEventListener(
+    //   "playing",
+    //   () => {
+    //     setLoading(false);
+    //   },
+    //   { once: true },
+    // );
 
     play();
-    setPlaying(true);
   });
 
   return (
@@ -89,9 +107,8 @@ const Player = () => {
           destroy();
         }}
       >
+        <View id="gradient" width={1920} height={1080} colorBottom="#000000" colorTop="#0000000" />
         <Column width={1680} height={126} x={115} y={836} color={"#0000000"} scroll="none">
-          {/* Row za back dugme */}
-          {/* <Row width={1680} height={90} alignItems="center" ref={backBtnRef}> */}
           <View>
             <View
               style={buttonStyle}
@@ -107,7 +124,7 @@ const Player = () => {
             {/* Row za centralna dugmad */}
             <Row
               ref={centerRowRef}
-              width={1680}
+              width={1690}
               height={60}
               alignItems="center"
               justifyContent="center"
@@ -130,7 +147,7 @@ const Player = () => {
               />
               <View
                 style={buttonStyle}
-                src={PLAYER_BASE + (playing() ? "pause.png" : "play.png")}
+                src={PLAYER_BASE + (isPlaying() ? "pause.png" : "play.png")}
                 onEnter={_handlePlayPause}
                 width={90}
                 height={90}
@@ -143,6 +160,23 @@ const Player = () => {
                 height={66}
               />
             </Row>
+          </View>
+          <View
+            height={31}
+            display="flex"
+            flexDirection="row"
+            justifyContent="spaceBetween"
+            alignItems="center"
+          >
+            <Text style={timeLabelStyle} width={119} height={31}>
+              {formatTimeHMS(currentTime())}
+            </Text>
+            <View width={1404} height={9} color={"#d9d9d91c"}>
+              <View color={"#ED1C24"} width={(currentTime() / duration()) * 1404}></View>
+            </View>
+            <Text style={timeLabelStyle} width={119} height={31}>
+              {formatTimeHMS(duration())}
+            </Text>
           </View>
         </Column>
       </View>
