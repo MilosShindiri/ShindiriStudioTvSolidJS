@@ -102,7 +102,7 @@ const Player = () => {
 
   return (
     <>
-      <Show when={!isLoading()}>
+      <Show when={!isLoading()} fallback={<LoadingScreen />}>
         <View
           onBackspace={() => {
             navigate(-1);

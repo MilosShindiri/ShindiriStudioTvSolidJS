@@ -80,7 +80,14 @@ const Movie = (props: MoviesProps) => {
   );
 
   return (
-    <Show when={props.data.movies()?.length} fallback={<LoadingScreen />}>
+    <Show
+      when={props.data.movies()?.length}
+      fallback={
+        <View width={1920} height={1080} rect color="#000000" zIndex={200} alpha={1}>
+          <LoadingScreen />
+        </View>
+      }
+    >
       <View forwardFocus={6}>
         <View
           ref={bg1}

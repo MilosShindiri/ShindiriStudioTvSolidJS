@@ -47,7 +47,7 @@ const LoadingScreen = (props: LoadingScreenProps) => {
   });
 
   return (
-    <View width={width} height={height} rect color="#000000" zIndex={200} alpha={1}>
+    <>
       <View
         ref={spinnerRef}
         src={spinnerSrc}
@@ -73,7 +73,7 @@ const LoadingScreen = (props: LoadingScreenProps) => {
       <Text x={880} y={620}>
         Loading...
       </Text>
-    </View>
+    </>
   );
 };
 
