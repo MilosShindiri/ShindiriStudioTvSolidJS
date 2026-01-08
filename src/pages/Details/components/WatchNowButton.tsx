@@ -1,6 +1,7 @@
 import { View, Text } from "@lightningtv/solid";
 import play from "/static/images/play.png";
 import { useNavigate } from "@solidjs/router";
+// import play from "../../../../public/static/images/play.png";
 
 const WatchNowButtonStyle = {
   width: 286,

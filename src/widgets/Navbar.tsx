@@ -1,13 +1,24 @@
 import { View, Text, For } from "@lightningtv/solid";
 import { Background } from "@/components/Background";
 import { useNavigate } from "@solidjs/router";
-import logo from "../assets/logo.png";
+import logo from "/static/images/logo.png";
 import Button from "../components/Button/Button";
-import { Row } from "@lightningtv/solid/primitives";
+import { removeKeepAlive, Row } from "@lightningtv/solid/primitives";
 import menuItems from "@/constants/menuItems";
+import { createEffect } from "solid-js";
+import { currentPath } from "@/state";
 
 const Navbar = props => {
   const navigate = useNavigate();
+
+  const goBack = () => {
+    if (currentPath() === "/") {
+      return true;
+    }
+
+    navigate(-1);
+    return true;
+  };
 
   let navbar, pageContainer;
   const focusNavbar = () => {
@@ -18,11 +29,17 @@ const Navbar = props => {
     return pageContainer.setFocus();
   };
 
+  // createEffect(() => {
+  //   if (currentPath() !== "/movies") {
+  //     removeKeepAlive("movies");
+  //   }
+  // });
+
   return (
-    <View onUp={focusNavbar} onDown={focusPageContainer}>
+    <View onUp={focusNavbar} onDown={focusPageContainer} onBack={goBack} onBackspace={goBack}>
       {/* <Background /> */}
 
-      <View x={32} y={32} src={logo} width={301} height={60} zIndex={200} />
+      <View x={32} y={32} src="/static/images/logo.png" width={301} height={60} zIndex={200} />
 
       <Row x={400} y={37} gap={20} ref={navbar} zIndex={200}>
         <For each={menuItems}>

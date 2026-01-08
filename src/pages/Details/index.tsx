@@ -1,5 +1,5 @@
 import { View, Text } from "@lightningtv/solid";
-import { useParams } from "@solidjs/router";
+import { useNavigate, useParams } from "@solidjs/router";
 import { createEffect, createResource, Show } from "solid-js";
 import { getMovieDetails, getSeriesDetails } from "../../api/services/DetailsPageServices";
 import BackButton from "./components/BackButton";
@@ -19,12 +19,16 @@ const MetaDataStyle = {
 const Details = () => {
   const { id, mediaType } = useParams();
   const [data] = createResource(() => id, mediaType === "movies" ? getMovieDetails : getSeriesDetails);
+  const navigate = useNavigate();
   setBackgroundWidth(1920);
   setBackgroundHeight(1080);
   setGlobalBackground(" ");
-
+  const goBack = () => {
+    navigate(-1);
+    return true;
+  };
   return (
-    <View>
+    <View onBack={goBack} onBackspace={goBack}>
       <Show when={data()}>
         <Column
           width={1083}

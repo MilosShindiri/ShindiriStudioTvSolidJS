@@ -1,4 +1,5 @@
 import {
+  currentPath,
   globalOverview,
   globalTitle,
   setBackgroundHeight,
@@ -9,23 +10,20 @@ import {
   setLoading,
 } from "@/state";
 import { View, Text, For, activeElement } from "@lightningtv/solid";
-import { Row } from "@lightningtv/solid/primitives";
+import { removeKeepAlive, Row } from "@lightningtv/solid/primitives";
 import { Accessor, createEffect, on, onMount, Show, Suspense } from "solid-js";
 import { debounce } from "@solid-primitives/scheduled";
 import Card from "./components/Card";
 import { moviesData } from "../../api/services/MediaServices";
 import LoadingScreen from "../../components/loading/Spinner";
 import { MovieItem } from "@/types/movie";
+import { useAppNavigation } from "@/hooks/useAppNavigation";
 
 interface MoviesProps {
   data: {
     movies: Accessor<MovieItem[] | undefined>;
   };
 }
-// import { createEffect, on, onCleanup, onMount, Show } from "solid-js";
-// import { debounce } from "@solid-primitives/scheduled";
-// import Card from "./components/Card";
-import { useAppNavigation } from "@/hooks/useAppNavigation";
 
 const MoviesStyles = {
   fontWeight: 700,
@@ -37,6 +35,7 @@ const MoviesStyles = {
 const Movie = (props: MoviesProps) => {
   let bg1, bg2;
   let enabled = true;
+  let wrapper, assetCARD;
 
   setBackgroundWidth(1920);
   setBackgroundHeight(697);
@@ -65,9 +64,52 @@ const Movie = (props: MoviesProps) => {
   });
 
   createEffect(
+    on(
+      activeElement,
+      el => {
+        console.log("asdf wrapper: ", assetCARD);
+        if (currentPath() !== "/movies") return;
+        if (!enabled) return;
+        // if (!el) return;
+        console.log("asdf upad u efekat ON, prevPath: ", currentPath());
+        if (!el) return;
+        console.log("asdf upad 2");
+        const item = el.item as MovieItem | undefined;
+        if (!item?.backdrop_path) return;
+
+        setBackgroundWidth(1920);
+        setBackgroundHeight(697);
+        delayedBackground(`https://image.tmdb.org/t/p/w300/${item.backdrop_path}`);
+        delayedTextUpdate(item.title || item.name || "", item.overview || "");
+      },
+      { defer: true },
+    ),
+  );
+
+  //   createEffect(
+  //   on(
+  //     () => (currentPath() === "/movies" ? activeElement() : null),
+  //     el => {
+  //       console.log("asdf upad u efekat ON, prevPath: ", currentPath());
+  //       if (!el) return;
+
+  //       const item = el.item as MovieItem | undefined;
+  //       if (!item?.backdrop_path) return;
+
+  //       setBackgroundWidth(1920);
+  //       setBackgroundHeight(697);
+  //       delayedBackground(`https://image.tmdb.org/t/p/w1920/${item.backdrop_path}`);
+  //       delayedTextUpdate(item.title || item.name || "", item.overview || "");
+  //     },
+  //     { defer: true },
+  //   ),
+  // );
+
+  /* createEffect(
     on(activeElement, el => {
-      const item = el?.item as MovieItem | undefined;
+      console.log("asdf upad u efekat ON");
       if (!enabled) return;
+      const item = el?.item as MovieItem | undefined;
       if (!item?.backdrop_path) return;
 
       setBackgroundWidth(1920);
@@ -77,18 +119,20 @@ const Movie = (props: MoviesProps) => {
 
       delayedTextUpdate(item.title || item.name || "", item.overview || "");
     }),
-  );
+  ); */
 
   return (
-    <Show
-      when={props.data.movies()?.length}
-      fallback={
-        <View width={1920} height={1080} rect color="#000000" zIndex={200} alpha={1}>
-          <LoadingScreen />
-        </View>
-      }
-    >
-      <View forwardFocus={6}>
+    // <Show
+    //   when={props.data.movies()?.length}
+    //   fallback={
+    //     <View width={1920} height={1080} rect color="#000000" zIndex={200} alpha={1}>
+    //       <LoadingScreen />
+    //     </View>
+    //   }
+    // >
+    //   <View forwardFocus={6}>
+    <Show when={props.data.movies()?.length} fallback={<LoadingScreen />}>
+      <View forwardFocus={6} ref={wrapper}>
         <View
           ref={bg1}
           width={1920}
@@ -152,6 +196,7 @@ const Movie = (props: MoviesProps) => {
                 onEnter={() => {
                   toDetails(item.id, "movies");
                 }}
+                ref={assetCARD}
               />
             )}
           </For>
