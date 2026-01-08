@@ -122,8 +122,8 @@ const Movies = (props: MoviesProps) => {
           x={64}
           gap={24}
           width={1241}
-          scroll="edge"
-          throttleInput={200}
+          scroll="center"
+          throttleInput={50}
           autofocus
           selected={moviesSelectedIndex()}
           onSelectedChanged={(index, row, active, lastSelected) => {
