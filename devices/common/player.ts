@@ -41,7 +41,7 @@ export class CommonPlayer implements Player {
     try {
       await this._player.load(streamUrl, startTime);
       if (autoPlay) this._videoElement.play();
-      console.log("Stream loaded successfully");
+      // console.log("Stream loaded successfully");
     } catch (error) {
       console.error("Failed to load stream:", error);
       throw error;

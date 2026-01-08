@@ -44,11 +44,11 @@ const App = props => {
       ref={window.APP}
       onAnnouncer={() => (announcer.enabled = !announcer.enabled)}
       onLast={() => history.back()}
-      onLeft={() => console.log("LEFT")}
-      onRight={() => console.log("RIGHT")}
-      onUp={() => console.log("UP")}
-      onDown={() => console.log("DOWN")}
-      onEnter={() => console.log("ENTER")}
+      // onLeft={() => console.log("LEFT")}
+      // onRight={() => console.log("RIGHT")}
+      // onUp={() => console.log("UP")}
+      // onDown={() => console.log("DOWN")}
+      // onEnter={() => console.log("ENTER")}
       onBack={goBack}
     >
       {/* Global background uvek prvi */}

@@ -49,9 +49,9 @@ const Player = () => {
   let centerRowRef;
 
   const navigate = useNavigate();
-  createEffect(() => {
-    console.log(currentTime() / duration());
-  });
+  // createEffect(() => {
+  //   console.log(currentTime() / duration());
+  // });
   const _handlePlayPause = () => {
     if (isPlaying()) {
       pause();
@@ -105,8 +105,9 @@ const Player = () => {
       <Show when={!isLoading()} fallback={<LoadingScreen />}>
         <View
           onBackspace={() => {
-            navigate(-1);
             destroy();
+            navigate(-1);
+            return;
           }}
         >
           <View id="gradient" width={1920} height={1080} colorBottom="#000000" colorTop="#0000000" />
