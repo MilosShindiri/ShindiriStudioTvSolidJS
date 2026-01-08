@@ -8,7 +8,8 @@ import {
 import { createEffect, createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import { Column, removeKeepAlive, Row } from "@lightningtv/solid/primitives";
-import { isLoading, setGlobalBackground, setIsPlayerActive, setLoading } from "@/state";
+import { isPlayerLoading, setPlayerLoading, setIsPlayerActive } from "@/state";
+
 import {
   destroy,
   init,
@@ -74,11 +75,12 @@ const Player = () => {
   };
 
   removeKeepAlive("navbar");
-  setGlobalBackground(" ");
+  // setGlobalBackground(" ");
 
   onMount(async () => {
     setIsPlayerActive(true);
-    setLoading(true);
+    setPlayerLoading(true);
+    // setLoading(true);
     // setGlobalBackground("#000000");
 
     parent = document.querySelector('[data-testid="player"]') as HTMLElement;
@@ -108,7 +110,7 @@ const Player = () => {
 
   return (
     <>
-      <Show when={!isLoading()} fallback={<LoadingScreen />}>
+      <Show when={!isPlayerLoading()} fallback={<LoadingScreen />}>
         <View
           onBackspace={() => {
             destroy();
@@ -200,9 +202,9 @@ const Player = () => {
           </View>
         </View>
       </Show>
-      <Show when={isBuffering()}>
+      {/* <Show when={isBuffering()}>
         <LoadingScreen />
-      </Show>
+      </Show> */}
     </>
   );
 };

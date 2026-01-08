@@ -1,6 +1,7 @@
 import Hls from "hls.js";
 import { createSignal } from "solid-js";
-import { setLoading } from "@/state";
+// import { setLoading } from "@/state";
+import { setPlayerLoading } from "@/state";
 
 /**
  * Internal refs
@@ -39,7 +40,7 @@ const bindVideoEvents = () => {
   videoElement.addEventListener("loadedmetadata", () =>
     safe(() => {
       setDuration(videoElement!.duration || 0);
-      setLoading(false);
+      setPlayerLoading(false);
       setIsBuffering(false);
     }),
   );
@@ -90,11 +91,10 @@ export const init = (element?: HTMLVideoElement | HTMLElement) => {
 export const load = (config: { streamUrl: string }) => {
   if (!player || !videoElement || destroyed) return;
 
-  setLoading(true);
+  setPlayerLoading(true);
   setIsBuffering(true);
 
   player.attachMedia(videoElement);
-
   if (destroyed) return;
 
   player.loadSource(config.streamUrl);
@@ -152,7 +152,7 @@ export const destroy = () => {
   setIsBuffering(false);
   setCurrentTime(0);
   setDuration(0);
-  setLoading(false);
+  setPlayerLoading(false);
 };
 
 /**
