@@ -5,10 +5,10 @@ import {
   View,
   hexColor,
 } from "@lightningtv/solid";
-import { createEffect, createSignal, For, onMount, Show } from "solid-js";
+import { createEffect, createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import { Column, removeKeepAlive, Row } from "@lightningtv/solid/primitives";
-import { isLoading, setGlobalBackground, setLoading } from "@/state";
+import { isLoading, setGlobalBackground, setIsPlayerActive, setLoading } from "@/state";
 import {
   destroy,
   init,
@@ -77,8 +77,9 @@ const Player = () => {
   setGlobalBackground(" ");
 
   onMount(async () => {
+    setIsPlayerActive(true);
     setLoading(true);
-    setGlobalBackground("#000000");
+    // setGlobalBackground("#000000");
 
     parent = document.querySelector('[data-testid="player"]') as HTMLElement;
 
@@ -98,6 +99,11 @@ const Player = () => {
     // );
 
     play();
+  });
+
+  onCleanup(() => {
+    setIsPlayerActive(false);
+    destroy();
   });
 
   return (

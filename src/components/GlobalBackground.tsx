@@ -1,6 +1,6 @@
 import { View } from "@lightningtv/solid";
 import { createEffect, onCleanup } from "solid-js";
-import { backgroundHeight, backgroundWidth, globalBackground } from "@/state";
+import { backgroundHeight, backgroundWidth, globalBackground, isPlayerActive } from "@/state";
 
 const GlobalBackground = () => {
   let bg1, bg2;
@@ -16,6 +16,7 @@ const GlobalBackground = () => {
   let nextAnim: any = null;
 
   createEffect(() => {
+    if (isPlayerActive()) return;
     const img = globalBackground();
     if (!img || img === lastBg) return;
 
