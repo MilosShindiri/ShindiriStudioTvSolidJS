@@ -122,17 +122,17 @@ const Movie = (props: MoviesProps) => {
   ); */
 
   return (
-    // <Show
-    //   when={props.data.movies()?.length}
-    //   fallback={
-    //     <View width={1920} height={1080} rect color="#000000" zIndex={200} alpha={1}>
-    //       <LoadingScreen />
-    //     </View>
-    //   }
-    // >
-    //   <View forwardFocus={6}>
-    <Show when={props.data.movies()?.length} fallback={<LoadingScreen />}>
-      <View forwardFocus={6} ref={wrapper}>
+    <Show
+      when={props.data.movies()?.length}
+      fallback={
+        <View width={1920} height={1080} rect color="#000000" zIndex={200} alpha={1}>
+          <LoadingScreen />
+        </View>
+      }
+    >
+      <View forwardFocus={6}>
+        {/* // <Show when={props.data.movies()?.length} fallback={<LoadingScreen />}> */}
+        {/* <View forwardFocus={6} ref={wrapper}> */}
         <View
           ref={bg1}
           width={1920}
