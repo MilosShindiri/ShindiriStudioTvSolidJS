@@ -5,10 +5,11 @@ import {
   View,
   hexColor,
 } from "@lightningtv/solid";
-import { createEffect, createSignal, For, onMount, Show } from "solid-js";
+import { createEffect, createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import { Column, removeKeepAlive, Row } from "@lightningtv/solid/primitives";
-import { isLoading, setGlobalBackground, setLoading } from "@/state";
+import { isPlayerLoading, setPlayerLoading, setIsPlayerActive } from "@/state";
+
 import {
   destroy,
   init,
@@ -74,11 +75,13 @@ const Player = () => {
   };
 
   removeKeepAlive("navbar");
-  setGlobalBackground(" ");
+  // setGlobalBackground(" ");
 
   onMount(async () => {
-    setLoading(true);
-    setGlobalBackground("#000000");
+    setIsPlayerActive(true);
+    setPlayerLoading(true);
+    // setLoading(true);
+    // setGlobalBackground("#000000");
 
     parent = document.querySelector('[data-testid="player"]') as HTMLElement;
 
@@ -100,13 +103,19 @@ const Player = () => {
     play();
   });
 
+  onCleanup(() => {
+    setIsPlayerActive(false);
+    destroy();
+  });
+
   return (
     <>
-      <Show when={!isLoading()} fallback={<LoadingScreen />}>
+      <Show when={!isPlayerLoading()} fallback={<LoadingScreen />}>
         <View
           onBackspace={() => {
-            navigate(-1);
             destroy();
+            navigate(-1);
+            return;
           }}
         >
           <View id="gradient" width={1920} height={1080} colorBottom="#000000" colorTop="#0000000" />
@@ -193,9 +202,9 @@ const Player = () => {
           </View>
         </View>
       </Show>
-      <Show when={isBuffering()}>
+      {/* <Show when={isBuffering()}>
         <LoadingScreen />
-      </Show>
+      </Show> */}
     </>
   );
 };

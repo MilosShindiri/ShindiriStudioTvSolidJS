@@ -1,124 +1,185 @@
-import { setLoading } from "@/state";
 import Hls from "hls.js";
 import { createSignal } from "solid-js";
-let player;
-let videoElement;
+// import { setLoading } from "@/state";
+import { setPlayerLoading } from "@/state";
 
+/**
+ * Internal refs
+ */
+let player: Hls | null = null;
+let videoElement: HTMLVideoElement | null = null;
+let destroyed = false;
+
+/**
+ * Public signals
+ */
 export const [isPlaying, setIsPlaying] = createSignal(false);
 export const [currentTime, setCurrentTime] = createSignal(0);
 export const [duration, setDuration] = createSignal(0);
 export const [isBuffering, setIsBuffering] = createSignal(false);
 
-const bindVideoEvents = () => {
-  videoElement.addEventListener("playing", () => {
-    setIsPlaying(true);
-  });
-
-  videoElement.addEventListener("pause", () => {
-    setIsPlaying(false);
-  });
-
-  videoElement.addEventListener("timeupdate", () => {
-    setCurrentTime(videoElement.currentTime);
-  });
-
-  videoElement.addEventListener("loadedmetadata", () => {
-    setDuration(videoElement.duration);
-    setLoading(false);
-    setIsBuffering(false);
-  });
-
-  videoElement.addEventListener("canplay", () => {
-    setIsBuffering(false);
-  });
-
-  videoElement.addEventListener("seeking", () => {
-    setIsBuffering(true);
-  });
+/**
+ * Helpers
+ */
+const safe = (fn: () => void) => {
+  if (!destroyed && videoElement) fn();
 };
 
-export const init = async element => {
+/**
+ * Bind video events
+ */
+const bindVideoEvents = () => {
+  if (!videoElement) return;
+
+  videoElement.addEventListener("playing", () => safe(() => setIsPlaying(true)));
+
+  videoElement.addEventListener("pause", () => safe(() => setIsPlaying(false)));
+
+  videoElement.addEventListener("timeupdate", () => safe(() => setCurrentTime(videoElement!.currentTime)));
+
+  videoElement.addEventListener("loadedmetadata", () =>
+    safe(() => {
+      setDuration(videoElement!.duration || 0);
+      setPlayerLoading(false);
+      setIsBuffering(false);
+    }),
+  );
+
+  videoElement.addEventListener("waiting", () => safe(() => setIsBuffering(true)));
+
+  videoElement.addEventListener("canplay", () => safe(() => setIsBuffering(false)));
+
+  videoElement.addEventListener("seeking", () => safe(() => setIsBuffering(true)));
+};
+
+/**
+ * Init player
+ */
+export const init = (element?: HTMLVideoElement | HTMLElement) => {
+  destroyed = false;
+
   player = new Hls({
     debug: false,
+    enableWorker: false, // TV SAFE
     liveBackBufferLength: 30,
-    enableWorker: false,
     maxBufferLength: 30,
+    backBufferLength: 30,
   });
-  videoElement = element;
 
-  if (!videoElement) {
+  if (element instanceof HTMLVideoElement) {
+    videoElement = element;
+  } else {
     videoElement = document.createElement("video");
 
     videoElement.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1";
 
+    videoElement.preload = "auto";
     videoElement.autoplay = false;
-    videoElement.preload = true;
     videoElement.muted = false;
     videoElement.playsInline = true;
     videoElement.setAttribute("webkit-playsinline", "true");
 
     document.body.insertBefore(videoElement, document.body.firstChild);
   }
+
   bindVideoEvents();
 };
 
-export const load = async config => {
-  if (!player || !videoElement) {
-    throw "Player not initialized yet";
-  }
+/**
+ * Load stream
+ */
+export const load = (config: { streamUrl: string }) => {
+  if (!player || !videoElement || destroyed) return;
+
+  setPlayerLoading(true);
+  setIsBuffering(true);
 
   player.attachMedia(videoElement);
+  if (destroyed) return;
+
   player.loadSource(config.streamUrl);
 };
 
+/**
+ * Controls
+ */
 export const play = async () => {
+  if (!videoElement || destroyed) return;
   await videoElement.play().catch(() => {});
 };
 
 export const pause = () => {
+  if (!videoElement || destroyed) return;
   videoElement.pause();
 };
 
-export const destroy = () => {
-  if (videoElement) {
-    videoElement.pause();
-    videoElement.remove();
-    videoElement = null;
-  }
-};
-
 export const forward = () => {
-  if (videoElement) {
-    videoElement.currentTime = Math.min(videoElement.currentTime + 5, videoElement.duration);
-  }
+  if (!videoElement || destroyed) return;
+  videoElement.currentTime = Math.min(videoElement.currentTime + 5, videoElement.duration || Infinity);
 };
 
 export const backward = () => {
-  if (videoElement) {
-    videoElement.currentTime = videoElement.currentTime - 5;
-  }
+  if (!videoElement || destroyed) return;
+  videoElement.currentTime = Math.max(videoElement.currentTime - 5, 0);
 };
 
-export const getCurrentTime = () => videoElement.currentTime;
+/**
+ * Destroy (CRITICAL FOR TV)
+ */
+export const destroy = () => {
+  destroyed = true;
 
-export const getVideoDuration = () => videoElement.duration;
+  if (player) {
+    try {
+      player.stopLoad();
+      player.detachMedia();
+      player.destroy();
+    } catch {}
+    player = null;
+  }
+
+  if (videoElement) {
+    try {
+      videoElement.pause();
+      videoElement.removeAttribute("src");
+      videoElement.load(); // force GC
+      videoElement.remove();
+    } catch {}
+    videoElement = null;
+  }
+
+  setIsPlaying(false);
+  setIsBuffering(false);
+  setCurrentTime(0);
+  setDuration(0);
+  setPlayerLoading(false);
+};
+
+/**
+ * Utils
+ */
+export const getCurrentTime = () => currentTime();
+export const getVideoDuration = () => duration();
 
 export const getTimeFormat = () => {
-  const f = s => new Date(s * 1000).toISOString().substr(14, 5);
-  return `${f(videoElement.currentTime)} : ${f(Math.floor(videoElement.duration))}`;
+  const f = (s = 0) => new Date(s * 1000).toISOString().substring(14, 19);
+  return `${f(currentTime())} / ${f(duration())}`;
 };
 
+/**
+ * Public API
+ */
 export default {
   init,
   load,
   play,
   pause,
-  currentTime,
-  duration,
-  getTimeFormat,
-  destroy,
   forward,
   backward,
+  destroy,
+  currentTime,
+  duration,
   isPlaying,
   isBuffering,
+  getTimeFormat,
 };

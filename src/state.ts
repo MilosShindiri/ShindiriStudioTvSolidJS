@@ -17,3 +17,7 @@ export const [prevPath, setPrevPath] = createSignal<string | null>(null);
 export const [currentPath, setCurrentPath] = createSignal<string | null>(null);
 
 export const [moviesSelectedIndex, setMoviesSelectedIndex] = createSignal(0);
+
+export const [isPlayerActive, setIsPlayerActive] = createSignal(false);
+
+export const [isPlayerLoading, setPlayerLoading] = createSignal(false);

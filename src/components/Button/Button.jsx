@@ -12,9 +12,9 @@ const styles = {
     fontFamily: "Roboto",
     fontSize: 32,
     color: "#575757",
-    $focus: {
-      color: 0xffffffff,
-    },
+    // $focus: {
+    //   color: 0xffffffff,
+    // },
   },
 
   underline: {
@@ -32,7 +32,9 @@ const styles = {
 export default function Button(props) {
   return (
     <View forwardStates style={styles.container} {...props}>
-      <Text style={styles.text}>{props.children}</Text>
+      <Text style={styles.text} color={props.selected ? "#ffffff" : "#575757"}>
+        {props.children}
+      </Text>
       <View style={styles.underline} />
     </View>
   );

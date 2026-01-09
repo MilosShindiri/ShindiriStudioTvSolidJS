@@ -1,7 +1,7 @@
 import { View, Text, For } from "@lightningtv/solid";
 import { Background } from "@/components/Background";
 import { useNavigate } from "@solidjs/router";
-import logo from "/static/images/logo.png";
+import logo from "../../public/static/images/logo.png";
 import Button from "../components/Button/Button";
 import { removeKeepAlive, Row } from "@lightningtv/solid/primitives";
 import menuItems from "@/constants/menuItems";
@@ -10,7 +10,10 @@ import { currentPath } from "@/state";
 
 const Navbar = props => {
   const navigate = useNavigate();
-
+  // createEffect(() => {
+  //   console.log(currentPath());
+  // });
+  // console.log(currentPath());
   const goBack = () => {
     if (currentPath() === "/") {
       return true;
@@ -29,31 +32,26 @@ const Navbar = props => {
     return pageContainer.setFocus();
   };
 
-  // createEffect(() => {
-  //   if (currentPath() !== "/movies") {
-  //     removeKeepAlive("movies");
-  //   }
-  // });
-
   return (
     <View onUp={focusNavbar} onDown={focusPageContainer} onBack={goBack} onBackspace={goBack}>
-      {/* <Background /> */}
-
-      <View x={32} y={32} src="/static/images/logo.png" width={301} height={60} zIndex={200} />
+      <View x={32} y={32} src={logo} width={301} height={60} zIndex={200} />
 
       <Row x={400} y={37} gap={20} ref={navbar} zIndex={200}>
         <For each={menuItems}>
-          {item => (
-            <Button
-              {...props}
-              width={118}
-              height={49}
-              onEnter={() => navigate(item.path)}
-              onClick={() => navigate(item.path)}
-            >
-              {item.label}
-            </Button>
-          )}
+          {item => {
+            return (
+              <Button
+                {...props}
+                selected={item.path === currentPath()}
+                width={118}
+                height={49}
+                onEnter={() => navigate(item.path)}
+                onClick={() => navigate(item.path)}
+              >
+                {item.label}
+              </Button>
+            );
+          }}
         </For>
       </Row>
 
