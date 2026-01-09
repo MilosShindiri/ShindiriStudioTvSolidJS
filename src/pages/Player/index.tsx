@@ -49,9 +49,9 @@ const Player = () => {
   let centerRowRef;
 
   const navigate = useNavigate();
-  createEffect(() => {
-    console.log(currentTime() / duration());
-  });
+  // createEffect(() => {
+  //   console.log(currentTime() / duration());
+  // });
   const _handlePlayPause = () => {
     if (isPlaying()) {
       pause();

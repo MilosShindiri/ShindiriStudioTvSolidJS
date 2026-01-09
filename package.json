@@ -8,6 +8,7 @@
     "start": "vite --open --host --force",
     "start:prod": "vite --open --host --force --mode production",
     "build": "vite build --sourcemap=false --base=./ --outDir lg --emptyOutDir false && ares-package lg --outdir lg --no-minify",
+    "build:tizen": "vite build --sourcemap=false --base=./ --outDir tizen --emptyOutDir false && tizen build-web -- ./tizen && tizen package -t wgt -o ./tizen -- ./tizen",
     "build:analyze": "vite-bundle-visualizer",
     "preview": "vite preview --open --port 8080",
     "test": "vitest",

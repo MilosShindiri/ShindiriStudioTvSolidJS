@@ -53,7 +53,7 @@ export const init = async element => {
 
     videoElement.autoplay = false;
     videoElement.preload = true;
-    videoElement.muted = true;
+    videoElement.muted = false;
     videoElement.playsInline = true;
     videoElement.setAttribute("webkit-playsinline", "true");
 

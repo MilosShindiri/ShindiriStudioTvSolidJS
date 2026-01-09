@@ -127,7 +127,7 @@ const Movies = (props: MoviesProps) => {
           autofocus
           selected={moviesSelectedIndex()}
           onSelectedChanged={(index, row, active, lastSelected) => {
-            console.log("ROW SELECTED:", index);
+            // console.log("ROW SELECTED:", index);
             setMoviesSelectedIndex(index);
 
             const el = row.children[index];
