@@ -50,7 +50,7 @@ const LoadingScreen = (props: LoadingScreenProps) => {
     <>
       <View
         ref={spinnerRef}
-        src={spinnerSrc}
+        src="/static/images/zabrinutiMita.png"
         width={120}
         height={120}
         zIndex={200}

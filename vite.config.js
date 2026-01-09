@@ -16,6 +16,9 @@ export default defineConfig(({ mode }) => {
     define: {
       __DEV__: mode !== "production",
     },
+    build: {
+      chunkSizeWarningLimit: 2000, // kB (or any value you want)
+    },
     plugins: [
       deviceConfigPlugin(process.env.TARGET_DEVICE),
       hexColorTransform({
