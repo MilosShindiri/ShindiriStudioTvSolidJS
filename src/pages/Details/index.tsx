@@ -22,7 +22,7 @@ const Details = () => {
   const navigate = useNavigate();
   setBackgroundWidth(1920);
   setBackgroundHeight(1080);
-  setGlobalBackground(" ");
+  setGlobalBackground(" a");
   const goBack = () => {
     navigate(-1);
     return true;
