@@ -21,10 +21,10 @@ const HomeStyle = {
 const Home = props => {
   setBackgroundWidth(1920);
   setBackgroundHeight(1080);
-  setGlobalBackground(background);
+  setGlobalBackground("../../../public/static/images/background.jpg");
 
   const homeElFocused = () => {
-    setGlobalBackground(background);
+    setGlobalBackground("../../../public/static/images/background.jpg");
   };
 
   removeKeepAlive("movies");

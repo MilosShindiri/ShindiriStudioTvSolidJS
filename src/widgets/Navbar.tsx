@@ -34,7 +34,7 @@ const Navbar = props => {
 
   return (
     <View onUp={focusNavbar} onDown={focusPageContainer} onBack={goBack} onBackspace={goBack}>
-      <View x={32} y={32} src={logo} width={301} height={60} zIndex={200} />
+      <View x={32} y={32} src="../../public/static/images/logo.png" width={301} height={60} zIndex={200} />
 
       <Row x={400} y={37} gap={20} ref={navbar} zIndex={200}>
         <For each={menuItems}>
