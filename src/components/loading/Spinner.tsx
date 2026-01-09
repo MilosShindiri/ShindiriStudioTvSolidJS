@@ -1,6 +1,6 @@
 import { View, Text } from "@lightningtv/solid";
 import { onMount, onCleanup } from "solid-js";
-import spinnerSrc from "../../../public/static/images/zabrinutiMita.png";
+import spinnerSrc from "../../../public/assets/zabrinutiMita.png";
 
 interface LoadingScreenProps {
   xPos?: number;

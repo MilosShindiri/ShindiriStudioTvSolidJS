@@ -1,7 +1,7 @@
 import { View, Text, For } from "@lightningtv/solid";
 import { Background } from "@/components/Background";
 import { useNavigate } from "@solidjs/router";
-import logo from "../../public/static/images/logo.png";
+import logo from "../../public/assets/logo.png";
 import Button from "../components/Button/Button";
 import { removeKeepAlive, Row } from "@lightningtv/solid/primitives";
 import menuItems from "@/constants/menuItems";
@@ -34,7 +34,7 @@ const Navbar = props => {
 
   return (
     <View onUp={focusNavbar} onDown={focusPageContainer} onBack={goBack} onBackspace={goBack}>
-      <View x={32} y={32} src="../../public/static/images/logo.png" width={301} height={60} zIndex={200} />
+      <View x={32} y={32} src={logo} width={301} height={60} zIndex={200} />
 
       <Row x={400} y={37} gap={20} ref={navbar} zIndex={200}>
         <For each={menuItems}>

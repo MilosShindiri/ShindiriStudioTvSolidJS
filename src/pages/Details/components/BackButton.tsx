@@ -1,5 +1,5 @@
 import { View } from "@lightningtv/solid";
-import backArrow from "../../../../public/static/images/vector.png";
+import backArrow from "../../../../public/assets/vector.png";
 import { useNavigate } from "@solidjs/router";
 
 const BackButtonStyle = {
